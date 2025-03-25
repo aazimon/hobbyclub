@@ -179,6 +179,6 @@ CREATE TABLE `replies` (
 	CONSTRAINT `FK_Reply_Topic` FOREIGN KEY (`topicId`) REFERENCES `topics` (`topicId`) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 COMMENT='The replies to Topics on a given club\'s home page.'
-COLLATE='latin1_general_ci'
+COLLATE='latin1_general_ci' 
 ENGINE=InnoDB
 ;

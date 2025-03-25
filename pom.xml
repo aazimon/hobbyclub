@@ -11,13 +11,19 @@
 
    <groupId>org.abberkeep.hobbyclub</groupId>
    <artifactId>HobbyClub</artifactId>
-   <version>0.0.1-SNAPSHOT</version>
+   <version>0.1.0-SNAPSHOT</version>
    <name>HobbyClub</name>
    <description>Maryville Capstone project HobbyClub</description>
 
    <url/>
    <developers>
-      <developer>Gary Deken</developer>
+      <developer>
+         <name>Gary Deken</name>
+         <roles>
+            <role>Architect</role>
+            <role>Developer</role>
+         </roles>
+      </developer>
    </developers>
 
    <properties>

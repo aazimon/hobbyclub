@@ -1,5 +1,14 @@
 # Create the database.
-#CREATE DATABASE `HobbyClub`
+CREATE DATABASE `HobbyClub`
+
+# Create application user
+CREATE USER 'HobbyClubApp'@'%' IDENTIFIED BY '##########';
+
+# setup permissions
+GRANT SELECT, DELETE, INSERT, UPDATE ON hobbyclub.* TO 'HobbyClubApp'@'%';
+FLUSH PRIVILEGES;
+
+SHOW GRANTS FOR 'HobbyClubApp'@'%';
 
 # create location tables.
 CREATE TABLE `state` (

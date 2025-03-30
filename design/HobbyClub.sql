@@ -2,7 +2,7 @@
 CREATE DATABASE `HobbyClub`
 
 # Create application user
-CREATE USER 'HobbyClubApp'@'%' IDENTIFIED BY 'Control#644Aqua27iTe';
+CREATE USER 'HobbyClubApp'@'%' IDENTIFIED BY '##########';
 
 # setup permissions
 GRANT SELECT, DELETE, INSERT, UPDATE ON hobbyclub.* TO 'HobbyClubApp'@'%';

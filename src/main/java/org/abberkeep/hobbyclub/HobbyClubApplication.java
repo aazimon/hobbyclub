@@ -1,4 +1,4 @@
-package org.abberkeep.hobbyclub.HobbyClub;
+package org.abberkeep.hobbyclub;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

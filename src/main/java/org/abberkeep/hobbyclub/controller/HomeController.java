@@ -4,9 +4,12 @@
  */
 package org.abberkeep.hobbyclub.controller;
 
-import java.util.Map;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Title: HomeController
@@ -20,16 +23,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class HomeController {
+   private static final Logger log = LoggerFactory.getLogger("HomeController");
 
    @RequestMapping("/")
-   public String indexPage(Map<String, Object> model) {
-//      ModelAndView mv = new ModelAndView();
-//      mv.setViewName("index");
-//      mv.getModel().put("data", "Welcome home man");
-//      model.put("data", "Home page");
-      System.out.println("Home page");
+   public ModelAndView indexPage() {
+      log.debug("Home Page Controller");
+      ModelAndView mv = new ModelAndView();
+      mv.getModel().put("title", "Hobby Club");
+      mv.getModel().put("loginUser", HtmlSnippets.getLoginOptions());
+      mv.getModel().put("categoryDropDown", HtmlSnippets.getCategoryOptions(Arrays.asList("Books")));
+      mv.getModel().put("stateDropDown", "");
+      mv.getModel().put("cityDropDown", "");
 
-      return "lobby";
+      mv.setViewName("lobby");
+
+      return mv;
    }
 
 }

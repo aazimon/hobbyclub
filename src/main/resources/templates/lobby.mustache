@@ -1,6 +1,55 @@
-{{>layout/head}}
-<body>
-   <h1>heading</h1>
-   <div></div>
-</body>
+<!DOCTYPE html>
+<html>
+   {{>layout/head}}
+   <body>
+      {{>layout/heading}}
+      <div class="container">
+         <div class="row">
+            <div class="col-12 col-md-6"><h1>Most Popular Clubs</h1></div>
+            <div class="col-12 col-md-6">
+               <h2>Find your Club</h2>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-md-6">
+               <div class="card mx-2">
+                  <div class="card-body">some text</div>
+               </div>
+            </div>
+            <div class="col">
+               <form action="search">
+                  <div class="row mx-1">
+                     <input type="search" class="form-control" id="club_name" placeholder="Search for Club">
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <h3>Club Categories</h3>
+                        <select class="form-select" aria-label="Select Club Type">
+                           <option value="*">Any</option>
+                           {{{categoryDropDown}}}
+                        </select>
+                        <h3>Location: State</h3>
+                        <select class="form-select" aria-label="Select State">
+                           <option value="*">Any</option>
+                           {{{stateDropDown}}}
+                        </select>
+                        <h3>Location: Nearest City</h3>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <select class="form-select" aria-label="Select Club Type">
+                           <option value="*">Any</option>
+                           {{{cityDropDown}}}
+                        </select>
+                     </div>
+                     <div class="col">
+                        <button aria-roledescription="search results will appear in new page">Find</button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </body>
 </html>

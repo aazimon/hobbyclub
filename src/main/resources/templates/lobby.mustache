@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-   {{>layout/head}}
+   <head>
+      {{>layout/head}}
+   </head>
    <body>
       {{>layout/heading}}
       <div class="container">
@@ -29,18 +31,18 @@
                            {{{categoryDropDown}}}
                         </select>
                         <h3>Location: State</h3>
-                        <select class="form-select" aria-label="Select State">
-                           <option value="*">Any</option>
-                           {{{stateDropDown}}}
+                        <select class="form-select" id="stateId" aria-label="Select State">
+                           {{#stateDropDown}}
+                           <option value="{{value}}">{{label}}</option>
+                           {{/stateDropDown}}
                         </select>
                         <h3>Location: Nearest City</h3>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-md-6">
-                        <select class="form-select" aria-label="Select Club Type">
+                        <select class="form-select" id="cityId" aria-label="Select Club Type">
                            <option value="*">Any</option>
-                           {{{cityDropDown}}}
                         </select>
                      </div>
                      <div class="col">
@@ -51,5 +53,7 @@
             </div>
          </div>
       </div>
+      {{>layout/cities}}
+      <script src="/js/cities.js"></script>
    </body>
 </html>

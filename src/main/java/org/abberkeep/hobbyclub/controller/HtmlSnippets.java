@@ -18,13 +18,6 @@ import java.util.List;
  */
 public class HtmlSnippets {
 
-   public static String getLoginOptions() {
-      return """
-                      <div class="row"><a class="btn btn-outline-secondary" href="">Sign in</a></div>
-                      <div class="row"><a href="">Become a Member</a></div>
-             """;
-   }
-
    public static String getCategoryOptions(List<String> categories) {
       StringBuilder str = new StringBuilder();
 

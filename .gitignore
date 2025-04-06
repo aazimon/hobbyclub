@@ -35,3 +35,4 @@ build/
 hobbyclub-openssh.pem
 
 nbactions.xml
+/nbproject/

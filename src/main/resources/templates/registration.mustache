@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      {{>layout/head}}
+   </head>
+   <body>
+      <nav class="navbar navbar-static-top">
+         <div class="container">
+            <div class="navbar-brand w-25 d-none d-md-block">
+               <a href="/"><img src="HobbyClub-large.png" class="img-fluid" alt="Hobby Club"/></a>
+            </div>
+            <div class="navbar-brand w-25 d-md-none d-block">
+               <a href="/"><img src="HobbyClub-small.png" class="img-fluid" alt="Hobby Club"/></a>
+            </div>
+         </div>
+      </nav>
+      <div class="container">
+         <div class="row"><h4 class="text-center">Sign up to become a Member</h4></div>
+         <form action="newMember">
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">Enter your First Name:</div>
+               <div class="col-4 test-start"><input class="form-control" id="firstName" placeholder="First Name"></div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">Enter your Last Name:</div>
+               <div class="col-4 test-start"><input class="form-control" id="lastName" placeholder="Last Name"></div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">Enter a Display Name:</div>
+               <div class="col-4 test-start"><input class="form-control" id="nickName" placeholder="Optional Name"></div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">Select your State:</div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="stateId" aria-label="Select State">
+                     {{#stateDropDown}}
+                     <option value="{{value}}">{{label}}</option>
+                     {{/stateDropDown}}
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">Select your City:</div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="cityId" aria-label="Select City">
+                     <option value="*">Any</option>
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">Select an Interest:</div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="interestOne" aria-label="Select Interest">
+                     <option value="*">Any</option>
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">Select an Interest:</div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="interestTwo" aria-label="Select Interest">
+                     <option value="*">Any</option>
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">Select an Interest:</div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="interestThree" aria-label="Select Interest">
+                     <option value="*">Any</option>
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">&nbsp;</div>
+               <div class="col-4 test-start">
+                  <button aria-roledescription="Register as a new Member">Register</button>
+               </div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">&nbsp;</div>
+               <div class="col-4 test-start">By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use.
+               </div>
+            </div>
+         </form>
+      </div>
+      {{>layout/cities}}
+      <script src="/js/cities.js"></script>
+   </body>
+</html>

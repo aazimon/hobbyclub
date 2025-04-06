@@ -7,9 +7,8 @@ package org.abberkeep.hobbyclub.services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import org.abberkeep.hobbyclub.TestUtils;
 import org.abberkeep.hobbyclub.controller.SelectOption;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.State;
@@ -41,7 +40,7 @@ public class LocationServiceTest {
 
    @Test
    public void testGetAllStates() {
-      List<State> states = buildStates(2);
+      List<State> states = TestUtils.buildStates(2);
       when(stateRepository.findAll()).thenReturn(states);
 
       List<SelectOption> actual = underTest.getAllStates();
@@ -55,38 +54,20 @@ public class LocationServiceTest {
 
    @Test
    public void testGetAllCitiesByState() {
-      List<City> cities = buildCities(3);
+      List<City> cities = TestUtils.buildCities(3);
       when(cityRepository.findByState_StateId(12)).thenReturn(cities);
 
       List<SelectOption> actual = underTest.getCitiesByStateId(12);
 
-      assertEquals(cities.size(), actual.size());
-      assertEquals(cities.get(0).getCityId().toString(), actual.get(0).getValue());
-      assertEquals(cities.get(0).getName(), actual.get(0).getLabel());
-      assertEquals(cities.get(1).getCityId().toString(), actual.get(1).getValue());
-      assertEquals(cities.get(1).getName(), actual.get(1).getLabel());
-      assertEquals(cities.get(2).getCityId().toString(), actual.get(2).getValue());
-      assertEquals(cities.get(2).getName(), actual.get(2).getLabel());
-   }
-
-   private List<City> buildCities(int number) {
-      List<City> cities = new ArrayList<>();
-
-      for (int i = 0; i < number; i++) {
-         cities.add(new City(i + 1, "City" + i, new State(12, "ST12", LocalDateTime.now()), LocalDateTime.now()));
-      }
-
-      return cities;
-   }
-
-   private List<State> buildStates(int number) {
-      List<State> states = new ArrayList<>();
-
-      for (int i = 0; i < number; i++) {
-         states.add(new State(i + 1, "ST" + i, LocalDateTime.now()));
-      }
-
-      return states;
+      assertEquals(cities.size() + 1, actual.size());
+      assertEquals("*", actual.get(0).getValue());
+      assertEquals("Any City", actual.get(0).getLabel());
+      assertEquals(cities.get(0).getCityId().toString(), actual.get(1).getValue());
+      assertEquals(cities.get(0).getName(), actual.get(1).getLabel());
+      assertEquals(cities.get(1).getCityId().toString(), actual.get(2).getValue());
+      assertEquals(cities.get(1).getName(), actual.get(2).getLabel());
+      assertEquals(cities.get(2).getCityId().toString(), actual.get(3).getValue());
+      assertEquals(cities.get(2).getName(), actual.get(3).getLabel());
    }
 
 }

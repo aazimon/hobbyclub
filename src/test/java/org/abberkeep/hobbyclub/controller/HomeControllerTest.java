@@ -7,8 +7,9 @@ package org.abberkeep.hobbyclub.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import org.abberkeep.hobbyclub.TestUtils;
+import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,8 @@ import org.springframework.web.servlet.ModelAndView;
 @ExtendWith(MockitoExtension.class)
 public class HomeControllerTest extends BaseControllerTest {
    @Mock
+   private ClubService clubService;
+   @Mock
    private LocationService locationService;
    @InjectMocks
    private HomeController underTest;
@@ -43,34 +46,29 @@ public class HomeControllerTest extends BaseControllerTest {
 
    @Test
    public void testIndexPage() {
-      when(locationService.getAllStates()).thenReturn(buildSelectOptions(3));
+      when(locationService.getAllStates()).thenReturn(TestUtils.buildSelectOptions(10));
+      when(locationService.getCitiesByStateId(1)).thenReturn(TestUtils.buildSelectOptions(3));
+      when(clubService.getCategories()).thenReturn(TestUtils.buildSelectOptions(4));
       ModelAndView actual = underTest.indexPage();
 
       validateTitleView("Hobby Club", "lobby", actual);
       //assertEquals("-", actual.getModel().get("loginId"));
-      validateOptionList((String) actual.getModel().get("categoryDropDown"), "Books");
 
       List<SelectOption> actualSO = (List<SelectOption>) actual.getModel().get("stateDropDown");
+      assertEquals(10, actualSO.size());
+      actualSO = (List<SelectOption>) actual.getModel().get("cityDropDown");
       assertEquals(3, actualSO.size());
+      actualSO = (List<SelectOption>) actual.getModel().get("categoryDropDown");
+      assertEquals(4, actualSO.size());
    }
 
    @Test
    public void testGetCities() {
-      when(locationService.getCitiesByStateId(12)).thenReturn(buildSelectOptions(3));
+      when(locationService.getCitiesByStateId(12)).thenReturn(TestUtils.buildSelectOptions(3));
 
       List<SelectOption> actual = underTest.getCities("12");
 
       assertEquals(3, actual.size());
-   }
-
-   private List<SelectOption> buildSelectOptions(int number) {
-      List<SelectOption> so = new ArrayList<>();
-
-      for (int i = 0; i < number; i++) {
-         so.add(new SelectOption("1" + i, "ST" + i));
-      }
-
-      return so;
    }
 
 }

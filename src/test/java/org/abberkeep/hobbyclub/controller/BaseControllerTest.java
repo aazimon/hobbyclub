@@ -6,7 +6,6 @@ package org.abberkeep.hobbyclub.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.StringJoiner;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -24,17 +23,6 @@ public abstract class BaseControllerTest {
    protected void validateTitleView(String expectedTitle, String expectedView, ModelAndView actual) {
       assertEquals(expectedTitle, actual.getModel().get("title"));
       assertEquals(expectedView, actual.getViewName());
-   }
-
-   protected void validateOptionList(String actual, String... expected) {
-      StringJoiner str = new StringJoiner("</option>\n", "<option value=\"", "</option>\n");
-
-      for (String expect : expected) {
-         String string = expect + "\">" + expect;
-         str.add(string);
-      }
-      assertEquals(str.toString(), actual);
-
    }
 
 }

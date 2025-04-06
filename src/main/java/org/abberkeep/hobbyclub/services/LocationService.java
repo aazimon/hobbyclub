@@ -44,6 +44,7 @@ public class LocationService {
       List<City> cities = cityRepository.findByState_StateId(stateId);
       List<SelectOption> display = new ArrayList<>();
 
+      display.add(new SelectOption("*", "Any City"));
       cities.forEach(city -> display.add(new SelectOption(city.getCityId().toString(), city.getName())));
 
       return display;

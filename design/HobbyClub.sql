@@ -457,3 +457,31 @@ INSERT INTO city (city_id, name, state_id) VALUES
 (150, 'Laramie', 50);
 commit;
 
+# add categories
+INSERT INTO categories (category_id, name) VALUES
+    (1, 'Anime Club'),
+    (2, 'Art Club'),
+    (3, 'Astronomy Club'),
+    (4, 'Board Game Club'),
+    (5, 'Book Club'),
+    (6, 'Car Enthusiast Club'),
+    (7, 'Chess Club'),
+    (8, 'Cooking Club'),
+    (9, 'Crafting Club'),
+    (10, 'Dance Club'),
+    (11, 'Debate Club'),
+    (12, 'Film Club'),
+    (13, 'Fitness Club'),
+    (14, 'Gaming Club'),
+    (15, 'Gardening Club'),
+    (16, 'Hiking Club'),
+    (17, 'Language Club'),
+    (18, 'Martial Arts Club'),
+    (19, 'Music Club'),
+    (20, 'Photography Club'),
+    (21, 'Robotics Club'),
+    (22, 'Science Club'),
+    (23, 'Sustainability Club'),
+    (24, 'Tech Club'),
+    (25, 'Writing Club');
+commit;

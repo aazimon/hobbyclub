@@ -4,8 +4,8 @@
  */
 package org.abberkeep.hobbyclub.controller;
 
-import java.util.Arrays;
 import java.util.List;
+import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +32,8 @@ public class HomeController extends BaseController {
    private static final Logger log = LoggerFactory.getLogger(HomeController.class);
    @Autowired
    private LocationService locationService;
+   @Autowired
+   private ClubService clubService;
 
    @RequestMapping("/")
    public ModelAndView indexPage() {
@@ -40,8 +42,9 @@ public class HomeController extends BaseController {
 
       // TODO check if user logged in.
       //mv.getModel().put("loginId", "-");
-      mv.getModel().put("categoryDropDown", HtmlSnippets.getCategoryOptions(Arrays.asList("Books")));
+      mv.getModel().put("categoryDropDown", clubService.getCategories());
       mv.getModel().put("stateDropDown", locationService.getAllStates());
+      mv.getModel().put("cityDropDown", locationService.getCitiesByStateId(1));
 
       return mv;
    }

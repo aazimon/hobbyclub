@@ -4,6 +4,7 @@
  */
 package org.abberkeep.hobbyclub.controller;
 
+import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,8 @@ public class AccountController extends BaseController {
    private static final Logger log = LoggerFactory.getLogger(AccountController.class);
    @Autowired
    private LocationService locationService;
+   @Autowired
+   private ClubService clubService;
 
    @RequestMapping("/registration")
    public ModelAndView registrationPage() {
@@ -36,6 +39,8 @@ public class AccountController extends BaseController {
       ModelAndView mv = getModelAndView("Hobby Club Registration", "registration");
 
       mv.getModel().put("stateDropDown", locationService.getAllStates());
+      mv.getModel().put("cityDropDown", locationService.getCitiesByStateId(1));
+      mv.getModel().put("categoryDropDown", clubService.getCategories());
 
       return mv;
    }

@@ -1,9 +1,12 @@
 document.getElementById('stateId').addEventListener('change', function () {
    const stateId = this.value;
    if (stateId) {
-      fetch('/ajax/cities/${stateId}').then(response => response.json())
+      let url = '/ajax/cities/${stateId}'
+      fetch(url).then(response => response.json())
               .then(cities => {
-                 const template = document.getElementById('cityTemplate').innerHTML;
+                 let base = document.getElementById('cityTemplate').innerHTML;
+                 base = doubler(base, '{');
+                 const template = doubler(base, '}');
                  const rendered = Mustache.render(template, {cities: cities});
                  document.getElementById('cityId').innerHTML = rendered;
               })

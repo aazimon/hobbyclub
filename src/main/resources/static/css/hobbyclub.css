@@ -1,0 +1,141 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/*
+    Created on : Mar 31, 2025, 9:31:36 PM
+    Author     : Gary Deken
+*/
+body {
+   font-family: "Sarabun", Helvetica, Arial, "sans-serif";
+   color: black;
+   font-size: 14px;
+}
+
+h1 {
+   font-size: 30px;
+   font-weight: bold;
+}
+
+h2 {
+   font-size: 22px;
+   font-weight: bold;
+}
+
+h3 {
+   font-size: 18px;
+   font-weight: bold;
+}
+h4 {
+   font-size: 30px;
+   font-weight: bold;
+   background-color: #529CF0;
+   padding: 6px;
+}
+h5 {
+   font-size: 120%;
+   font-weight: bold;
+   color: black;
+   background-color: #529CF0;
+   padding: 6px;
+}
+h6 {
+   font-size: 100%;
+   font-weight: bold;
+   background-color: #52CFF2;
+   padding: 6px;
+}
+
+a:link {
+   color: #86A4C7;
+}
+
+a:visited {
+   color: #5A44C7;
+}
+
+button, input.submitButton {
+   background-color: #526AF2;
+   border-radius: 10px;
+   padding: 6px 10px 6px 10px;
+   color: white;
+}
+
+.inputLabel, .radioLabel, .checkboxLabel, .submitLabel {
+   font-size: 105%;
+   font-weight: bold;
+}
+
+input.inputField {
+   padding: 5px;
+   border-radius: 10px;
+   border: 1px solid #52CFF2;
+}
+input[type="radio"], input[type="checkbox"] {
+   accent-color: #52CFF2;
+   margin-left: 3px;
+}
+div.box {
+   height: 100px;
+   width: 100px;
+   display: inline-block;
+   margin: 0 10px 0 10px;
+}
+
+#primary1 {
+   background-color: #529CF0;
+}
+
+#primary2 {
+   background-color: #526AF2;
+}
+
+#primary3 {
+   background-color: #52CFF2;
+}
+
+#secondary1 {
+   background-color: #5A44C7;
+}
+
+#secondary2 {
+   background-color: #86A4C7;
+}
+.warning {
+   background-color: #F08316;
+   font-weight: bold;
+   color: black;
+   padding: 6px 10px 6px 10px;
+   border-radius: 10px;
+}
+.error {
+   background-color: #F3311F;
+   font-weight: bold;
+   color: white;
+   padding: 6px 10px 6px 10px;
+   border-radius: 10px;
+}
+.success {
+   background-color: #2AC912;
+   font-weight: bold;
+   color: white;
+   padding: 6px 10px 6px 10px;
+   border-radius: 10px;
+}
+
+.spacer {
+   margin-top: 20px;
+}
+#footer {
+   border-top: 1px solid #dddddd;
+   margin-top: 50px;
+   padding: 10px;
+   text-align: center;
+}
+.navbar-inverse {
+   background-color: #526AF2;
+}
+.list-group {
+   font-size: 100%;
+}
+

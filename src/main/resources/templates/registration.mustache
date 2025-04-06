@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+   {{>layout/head}}
+   <body onload="activateStateCity()">
+      <nav class="navbar navbar-static-top">
+         <div class="container">
+            <div class="navbar-brand w-25 d-none d-md-block">
+               <a href="/"><img src="HobbyClub-large.png" class="img-fluid" alt="Hobby Club"/></a>
+            </div>
+            <div class="navbar-brand w-25 d-md-none d-block">
+               <a href="/"><img src="HobbyClub-small.png" class="img-fluid" alt="Hobby Club"/></a>
+            </div>
+         </div>
+      </nav>
+      <div class="container">
+         <div class="row"><h4 class="text-center">Sign up to become a Member</h4></div>
+         <form action="/newMember" method="post">
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="firstName">Enter your First Name:</label></div>
+               <div class="col-4 test-start"><input class="form-control" id="firstName" placeholder="First Name"></div>
+            </div>
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="lastName">Enter your Last Name:</label></div>
+               <div class="col-4 test-start"><input class="form-control" id="lastName" placeholder="Last Name"></div>
+            </div>
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="nickName">Enter a Display Name:</label></div>
+               <div class="col-4 test-start"><input class="form-control" id="nickName" placeholder="Optional Name"></div>
+            </div>
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="stateId">Select your State:</label></div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="stateId" aria-label="Select State">
+                     {{#stateDropDown}}
+                     <option value="{{value}}">{{label}}</option>
+                     {{/stateDropDown}}
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="cityId">Select your City:</label></div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="cityId" aria-label="Select City">
+                     {{#cityDropDown}}
+                     <option value="{{value}}">{{label}}</option>
+                     {{/cityDropDown}}
+                  </select>
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="interestOne">Select an Interest:</label></div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="interestOne" aria-label="Select Interest">
+                     {{#categoryDropDown}}
+                     <option value="{{value}}">{{label}}</option>
+                     {{/categoryDropDown}}
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="interestTwo">Select an Interest:</label></div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="interestTwo" aria-label="Select Interest">
+                     {{#categoryDropDown}}
+                     <option value="{{value}}">{{label}}</option>
+                     {{/categoryDropDown}}
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="interestThree">Select an Interest:</label></div>
+               <div class="col-4 test-start">
+                  <select class="form-select" id="interestThree" aria-label="Select Interest">
+                     {{#categoryDropDown}}
+                     <option value="{{value}}">{{label}}</option>
+                     {{/categoryDropDown}}
+                  </select>
+               </div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">&nbsp;</div>
+               <div class="col-4 test-start">
+                  <button aria-roledescription="Register as a new Member" class="btn btn-primary">Register</button>
+               </div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">&nbsp;</div>
+               <div class="col-4 test-start">By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use.
+               </div>
+            </div>
+         </form>
+      </div>
+      {{>layout/cities}}
+   </body>
+</html>

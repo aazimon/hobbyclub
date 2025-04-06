@@ -33,3 +33,6 @@ build/
 .vscode/
 
 hobbyclub-openssh.pem
+
+nbactions.xml
+/nbproject/

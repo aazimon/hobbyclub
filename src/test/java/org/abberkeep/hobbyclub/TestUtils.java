@@ -7,7 +7,6 @@ package org.abberkeep.hobbyclub;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.abberkeep.hobbyclub.controller.SelectOption;
 import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.State;
@@ -42,16 +41,6 @@ public class TestUtils {
       }
 
       return cities;
-   }
-
-   public static List<SelectOption> buildSelectOptions(int number) {
-      List<SelectOption> so = new ArrayList<>();
-
-      for (int i = 0; i < number; i++) {
-         so.add(new SelectOption("1" + i, "ST" + i));
-      }
-
-      return so;
    }
 
    public static List<State> buildStates(int number) {

@@ -29,4 +29,8 @@ public class AccountService {
       return null;
    }
 
+   public boolean checkNickName(String nickName) {
+      return accountRepository.existsByNickName(nickName);
+   }
+
 }

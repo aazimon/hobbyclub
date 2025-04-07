@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
-import org.abberkeep.hobbyclub.TestUtils;
 import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,9 +45,9 @@ public class HomeControllerTest extends BaseControllerTest {
 
    @Test
    public void testIndexPage() {
-      when(locationService.getAllStates()).thenReturn(TestUtils.buildSelectOptions(10));
-      when(locationService.getCitiesByStateId(1)).thenReturn(TestUtils.buildSelectOptions(3));
-      when(clubService.getCategories()).thenReturn(TestUtils.buildSelectOptions(4));
+      when(locationService.getAllStates()).thenReturn(buildSelectOptions(10));
+      when(locationService.getCitiesByStateId(1)).thenReturn(buildSelectOptions(3));
+      when(clubService.getCategories()).thenReturn(buildSelectOptions(4));
       ModelAndView actual = underTest.indexPage();
 
       validateTitleView("Hobby Club", "lobby", actual);
@@ -64,7 +63,7 @@ public class HomeControllerTest extends BaseControllerTest {
 
    @Test
    public void testGetCities() {
-      when(locationService.getCitiesByStateId(12)).thenReturn(TestUtils.buildSelectOptions(3));
+      when(locationService.getCitiesByStateId(12)).thenReturn(buildSelectOptions(3));
 
       List<SelectOption> actual = underTest.getCities("12");
 

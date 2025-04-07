@@ -6,7 +6,7 @@ package org.abberkeep.hobbyclub.services.repositories;
 
 import org.abberkeep.hobbyclub.services.domains.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * Title: AccountRepository
@@ -18,7 +18,8 @@ import org.springframework.stereotype.Repository;
  * @author Gary Deken
  * @version
  */
-@Repository
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 
+   @Query("SELECT count(a) > 0 FROM Account a WHERE a.nickName = ?1")
+   boolean existsByNickName(String nickName);
 }

@@ -17,6 +17,7 @@ package org.abberkeep.hobbyclub.controller;
 public class SelectOption {
    private String value;
    private String label;
+   private boolean selected = false;
 
    public SelectOption(String value, String label) {
       this.value = value;
@@ -31,12 +32,20 @@ public class SelectOption {
       return label;
    }
 
+   public boolean getSelected() {
+      return selected;
+   }
+
    public void setValue(String value) {
       this.value = value;
    }
 
    public void setLabel(String label) {
       this.label = label;
+   }
+
+   public void setSelected(boolean selected) {
+      this.selected = selected;
    }
 
 }

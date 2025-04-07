@@ -14,25 +14,43 @@
       </nav>
       <div class="container">
          <div class="row"><h4 class="text-center">Sign up to become a Member</h4></div>
-         <form action="/newMember" method="post">
+         <form action="newMember" method="post">
             <div class="row justify-content-center form-group">
                <div class="col-4 text-end"><label for="firstName">Enter your First Name:</label></div>
-               <div class="col-4 test-start"><input class="form-control" id="firstName" placeholder="First Name"></div>
+               <div class="col-4 test-start">
+                  {{#missingFirst}}
+                  <div class="error">First Name is Required</div>
+                  {{/missingFirst}}
+                  <input class="form-control" id="firstName" name="firstName" placeholder="First Name"{{#firstName}} value="{{firstName}}"{{/firstName}}>
+               </div>
             </div>
             <div class="row justify-content-center form-group">
                <div class="col-4 text-end"><label for="lastName">Enter your Last Name:</label></div>
-               <div class="col-4 test-start"><input class="form-control" id="lastName" placeholder="Last Name"></div>
+               <div class="col-4 test-start">
+                  {{#missingLast}}
+                  <div class="error">First Name is Required</div>
+                  {{/missingLast}}
+                  <input class="form-control" id="lastName" name="lastName" placeholder="Last Name"{{#lastName}} value="{{lastName}}"{{/lastName}}>
+               </div>
             </div>
             <div class="row justify-content-center form-group">
                <div class="col-4 text-end"><label for="nickName">Enter a Display Name:</label></div>
-               <div class="col-4 test-start"><input class="form-control" id="nickName" placeholder="Optional Name"></div>
+               <div class="col-4 test-start">
+                  {{#takenNick}}
+                  <div class="error">Display Name is Taken</div>
+                  {{/takenNick}}
+                  <input class="form-control" id="nickName" name="nickName" placeholder="Optional Name"{{#nickName}} value="{{nickName}}"{{/nickName}}>
+               </div>
             </div>
             <div class="row justify-content-center form-group">
                <div class="col-4 text-end"><label for="stateId">Select your State:</label></div>
                <div class="col-4 test-start">
-                  <select class="form-select" id="stateId" aria-label="Select State">
+                  {{#missingState}}
+                  <div class="error">State is Required</div>
+                  {{/missingState}}
+                  <select class="form-select" id="stateId" name="stateId" aria-label="Select State">
                      {{#stateDropDown}}
-                     <option value="{{value}}">{{label}}</option>
+                     <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
                      {{/stateDropDown}}
                   </select>
                </div>
@@ -40,9 +58,12 @@
             <div class="row justify-content-center form-group">
                <div class="col-4 text-end"><label for="cityId">Select your City:</label></div>
                <div class="col-4 test-start">
-                  <select class="form-select" id="cityId" aria-label="Select City">
+                  {{#missingCity}}
+                  <div class="error">City is Required</div>
+                  {{/missingCity}}
+                  <select class="form-select" id="cityId" name="cityId" aria-label="Select City">
                      {{#cityDropDown}}
-                     <option value="{{value}}">{{label}}</option>
+                     <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
                      {{/cityDropDown}}
                   </select>
                   </select>
@@ -51,9 +72,12 @@
             <div class="row justify-content-center form-group">
                <div class="col-4 text-end"><label for="interestOne">Select an Interest:</label></div>
                <div class="col-4 test-start">
-                  <select class="form-select" id="interestOne" aria-label="Select Interest">
+                  {{#missingInterest}}
+                  <div class="error">At least One Interest is Required</div>
+                  {{/missingInterest}}
+                  <select class="form-select" id="interestOne" name="interestOne" aria-label="Select Interest">
                      {{#categoryDropDown}}
-                     <option value="{{value}}">{{label}}</option>
+                     <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
                      {{/categoryDropDown}}
                   </select>
                </div>
@@ -61,27 +85,27 @@
             <div class="row justify-content-center form-group">
                <div class="col-4 text-end"><label for="interestTwo">Select an Interest:</label></div>
                <div class="col-4 test-start">
-                  <select class="form-select" id="interestTwo" aria-label="Select Interest">
-                     {{#categoryDropDown}}
-                     <option value="{{value}}">{{label}}</option>
-                     {{/categoryDropDown}}
+                  <select class="form-select" id="interestTwo" name="interestTwo" aria-label="Select Interest">
+                     {{#categoryDropDown2}}
+                     <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+                     {{/categoryDropDown2}}
                   </select>
                </div>
             </div>
             <div class="row justify-content-center form-group">
                <div class="col-4 text-end"><label for="interestThree">Select an Interest:</label></div>
                <div class="col-4 test-start">
-                  <select class="form-select" id="interestThree" aria-label="Select Interest">
-                     {{#categoryDropDown}}
-                     <option value="{{value}}">{{label}}</option>
-                     {{/categoryDropDown}}
+                  <select class="form-select" id="interestThree" name="interestThree" aria-label="Select Interest">
+                     {{#categoryDropDown3}}
+                     <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+                     {{/categoryDropDown3}}
                   </select>
                </div>
             </div>
             <div class="row justify-content-center">
                <div class="col-4 text-end">&nbsp;</div>
                <div class="col-4 test-start">
-                  <button aria-roledescription="Register as a new Member" class="btn btn-primary">Register</button>
+                  <button type="submit" aria-roledescription="Register as a new Member" class="btn btn-primary">Register</button>
                </div>
             </div>
             <div class="row justify-content-center">

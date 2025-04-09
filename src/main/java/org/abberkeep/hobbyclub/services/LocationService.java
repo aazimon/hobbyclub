@@ -6,11 +6,14 @@ package org.abberkeep.hobbyclub.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.abberkeep.hobbyclub.controller.SelectOption;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.State;
 import org.abberkeep.hobbyclub.services.repositories.CityRepository;
 import org.abberkeep.hobbyclub.services.repositories.StateRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LocationService {
+   private static final Logger log = LoggerFactory.getLogger(LocationService.class);
    @Autowired
    private StateRepository stateRepository;
    @Autowired
@@ -40,6 +44,16 @@ public class LocationService {
       return display;
    }
 
+   public City getCityById(Integer cityId) {
+      Optional<City> opt = cityRepository.findById(cityId);
+
+      if (opt.isEmpty()) {
+         log.error("City not found by ID {}, Returning null", cityId);
+      }
+
+      return opt.get();
+   }
+
    public List<SelectOption> getCitiesByStateId(Integer stateId) {
       List<City> cities = cityRepository.findByState_StateId(stateId);
       List<SelectOption> display = new ArrayList<>();
@@ -48,6 +62,16 @@ public class LocationService {
       cities.forEach(city -> display.add(new SelectOption(city.getCityId().toString(), city.getName())));
 
       return display;
+   }
+
+   public State getStateById(Integer stateId) {
+      Optional<State> opt = stateRepository.findById(stateId);
+
+      if (opt.isEmpty()) {
+         log.error("State not found by ID {}, Returning null", stateId);
+      }
+
+      return opt.get();
    }
 
 }

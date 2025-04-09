@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.abberkeep.hobbyclub.services.domains.Category;
-import org.abberkeep.hobbyclub.services.domains.City;
-import org.abberkeep.hobbyclub.services.domains.State;
 
 /**
  * Title: TestUtils
@@ -31,26 +29,6 @@ public class TestUtils {
       }
 
       return cats;
-   }
-
-   public static List<City> buildCities(int number) {
-      List<City> cities = new ArrayList<>();
-
-      for (int i = 0; i < number; i++) {
-         cities.add(new City(i + 1, "City" + i, new State(12, "ST12", LocalDateTime.now()), LocalDateTime.now()));
-      }
-
-      return cities;
-   }
-
-   public static List<State> buildStates(int number) {
-      List<State> states = new ArrayList<>();
-
-      for (int i = 0; i < number; i++) {
-         states.add(new State(i + 1, "ST" + i, LocalDateTime.now()));
-      }
-
-      return states;
    }
 
 }

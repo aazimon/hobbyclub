@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "accounts")
 public class Account {
+   public static final Character ACTIVE = 'A';
+   public static final Character DELETED = 'D';
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer accountId;

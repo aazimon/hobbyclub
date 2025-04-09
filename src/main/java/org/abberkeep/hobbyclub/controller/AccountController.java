@@ -8,12 +8,14 @@ import java.util.List;
 import org.abberkeep.hobbyclub.services.AccountService;
 import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
+import org.abberkeep.hobbyclub.services.domains.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,7 +62,10 @@ public class AccountController extends BaseController {
       mv.getModel().put("title", "Hobby Club Registration");
       if (validateRegistrationForm(registrationForm, mv)) {
          // valid data.
+         Account account = accountService.createNewAccount(registrationForm);
+
          mv.setViewName("userhome");
+         setUpHomePage(mv, account);
       } else {
          // data missing.
          mv.getModel().put("firstName", registrationForm.getFirstName());
@@ -88,6 +93,16 @@ public class AccountController extends BaseController {
       return mv;
    }
 
+   @RequestMapping("/userHome")
+   public ModelAndView userHomePage(@PathVariable String accountId) {
+      Account account = accountService.getAccountById(Integer.valueOf(accountId));
+      ModelAndView mv = getModelAndView(account.getNickName() + " - Home Page", "userHome");
+
+      setUpHomePage(mv, account);
+
+      return mv;
+   }
+
    private List<SelectOption> setSelected(List<SelectOption> options, String value) {
       String valueId = "1";
       if (StringUtils.hasText(value)) {
@@ -105,6 +120,10 @@ public class AccountController extends BaseController {
       }
 
       return options;
+   }
+
+   private void setUpHomePage(ModelAndView mv, Account account) {
+
    }
 
    private boolean validateRegistrationForm(RegistrationForm form, ModelAndView mv) {

@@ -2,12 +2,14 @@ package org.abberkeep.hobbyclub;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@ActiveProfiles("local")
 class HobbyClubApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+   @Test
+   void contextLoads() {
+   }
 
 }

@@ -4,9 +4,10 @@
  */
 package org.abberkeep.hobbyclub.services;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.abberkeep.hobbyclub.TestBase;
+import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.State;
 
@@ -20,7 +21,21 @@ import org.abberkeep.hobbyclub.services.domains.State;
  * @author Gary Deken
  * @version
  */
-public class BaseServiceTest {
+public class TestBaseService extends TestBase {
+
+   protected Category buildCategory(int id, String category) {
+      return new Category(id, category);
+   }
+
+   protected List<Category> buildCategories(int number) {
+      List<Category> cats = new ArrayList<>();
+
+      for (int i = 0; i < number; i++) {
+         cats.add(buildCategory(i + 1, "Cat" + i + " Club"));
+      }
+
+      return cats;
+   }
 
    protected List<City> buildCities(int number) {
       List<City> cities = new ArrayList<>();
@@ -34,7 +49,7 @@ public class BaseServiceTest {
    }
 
    protected City buildCity(int id, String city, State state) {
-      return new City(id + 1, city, state, LocalDateTime.now());
+      return new City(id + 1, city, state);
    }
 
    protected List<State> buildStates(int number) {
@@ -45,10 +60,6 @@ public class BaseServiceTest {
       }
 
       return states;
-   }
-
-   protected State buildState(int id, String state) {
-      return new State(id + 1, state, LocalDateTime.now());
    }
 
 }

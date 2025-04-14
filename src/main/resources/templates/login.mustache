@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+   {{>layout/head}}
+   <body>
+      <nav class="navbar navbar-static-top">
+         <div class="container">
+            <div class="navbar-brand w-25 d-none d-md-block">
+               <a href="/"><img src="HobbyClub-large.png" class="img-fluid" alt="Hobby Club"/></a>
+            </div>
+            <div class="navbar-brand w-25 d-md-none d-block">
+               <a href="/"><img src="HobbyClub-small.png" class="img-fluid" alt="Hobby Club"/></a>
+            </div>
+         </div>
+      </nav>
+      <div class="container">
+         <div class="row"><h4 class="text-center">Log In</h4></div>
+         <form action="loginHobbyClub" method="post">
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="nickName">Enter your Display Name:</label></div>
+               <div class="col-4 text-start">
+                  {{#missingNick}}
+                  <div class="error">Display Name is Required</div>
+                  {{/missingNick}}
+                  <input class="form-control" id="nickName" name="nickName"{{#nickName}} value="{{nickName}}"{{/nickName}}>
+               </div>
+            </div>
+            <div class="row justify-content-center form-group">
+               <div class="col-4 text-end"><label for="pass">Enter your Password:</label></div>
+               <div class="col-4 text-start">
+                  {{#missingPass}}
+                  <div class="error">Password is required.</div>
+                  {{/missingPass}}
+                  {{#invalidLogin}}
+                  <div class="error">Invalid login Credentials.</div>
+                  {{/invalidLogin}}
+                  <input type="password" class="form-control" id="password" name="password" autocomplete="off"{{#password}} value="{{password}}"{{/password}}>
+                         &nbsp;10 or more characters.
+               </div>
+            </div>
+            <div class="row justify-content-center">
+               <div class="col-4 text-end">&nbsp;</div>
+               <div class="col-4 text-start">
+                  <button type="submit" aria-roledescription="Log into Hobby Club" class="btn btn-primary">Log In</button>
+               </div>
+            </div>
+         </form>
+      </div>
+   </body>
+</html>

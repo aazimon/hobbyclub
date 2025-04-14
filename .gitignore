@@ -36,3 +36,5 @@ hobbyclub-openssh.pem
 
 nbactions.xml
 /nbproject/
+/nb-configuration.xml
+/UserPass.txt

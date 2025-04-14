@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.abberkeep.hobbyclub.controller.SelectOption;
 import org.abberkeep.hobbyclub.services.domains.Category;
+import org.abberkeep.hobbyclub.services.domains.State;
 import org.abberkeep.hobbyclub.services.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,14 +28,18 @@ public class ClubService {
    @Autowired
    private CategoryRepository categoryRepository;
 
-   public List<SelectOption> getCategories() {
+   public List<SelectOption> getCategories(String firstLabel) {
       List<Category> cats = categoryRepository.findAllByOrderByNameAsc();
       List<SelectOption> display = new ArrayList<>();
 
-      display.add(new SelectOption("", "Any"));
+      display.add(new SelectOption("", firstLabel));
       cats.forEach(category -> display.add(new SelectOption(category.getCategoryId().toString(), category.getName())));
 
       return display;
    }
 
+   public boolean validateClubByTitleState(String title, State state) {
+
+      return false;
+   }
 }

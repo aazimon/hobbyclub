@@ -25,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author Gary Deken
  */
 @ExtendWith(MockitoExtension.class)
-public class LocationServiceTest extends BaseServiceTest {
+public class LocationServiceTest extends TestBaseService {
    @Mock
    private StateRepository stateRepository;
    @Mock

@@ -4,6 +4,7 @@
  */
 package org.abberkeep.hobbyclub.controller;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.abberkeep.hobbyclub.services.AccountService;
 import org.abberkeep.hobbyclub.services.ClubService;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,6 +40,37 @@ public class AccountController extends BaseController {
    @Autowired
    private ClubService clubService;
 
+   @RequestMapping("/login")
+   public ModelAndView login() {
+      log.debug("Log In");
+      ModelAndView mv = getModelAndView("Log in to Hobby Club", "login");
+
+      return mv;
+   }
+
+   @PostMapping("/loginHobbyClub")
+   public ModelAndView loginHobbyClub(@ModelAttribute LogInForm loginForm, HttpSession session) {
+      log.debug("Log In Hobby Club");
+      ModelAndView mv = new ModelAndView();
+
+      if (validateLogInForm(loginForm, mv)) {
+         Account account = accountService.getAccountByNickNamePassword(loginForm.getNickName(), loginForm.getPassword());
+         if (account == null) {
+            mv.getModel().put("invalidLogin", "true");
+         } else {
+            session.setAttribute("userAccount", account);
+            setUpHomePage(mv, account);
+            return mv;
+         }
+      }
+      mv.getModel().put("title", "Log in to Hobby Club");
+      mv.setViewName("login");
+      mv.getModel().put("nickName", loginForm.getNickName());
+      mv.getModel().put("password", loginForm.getPassword());
+
+      return mv;
+   }
+
    @RequestMapping("/registration")
    public ModelAndView registrationPage() {
       log.debug("Registration Page");
@@ -47,15 +78,16 @@ public class AccountController extends BaseController {
 
       mv.getModel().put("stateDropDown", locationService.getAllStates());
       mv.getModel().put("cityDropDown", locationService.getCitiesByStateId(1));
-      mv.getModel().put("categoryDropDown", clubService.getCategories());
-      mv.getModel().put("categoryDropDown2", clubService.getCategories());
-      mv.getModel().put("categoryDropDown3", clubService.getCategories());
+      List<SelectOption> categories = clubService.getCategories("Choose");
+      mv.getModel().put("categoryDropDown", categories);
+      mv.getModel().put("categoryDropDown2", categories);
+      mv.getModel().put("categoryDropDown3", categories);
 
       return mv;
    }
 
    @PostMapping("/newMember")
-   public ModelAndView registerNewMember(@ModelAttribute RegistrationForm registrationForm) {
+   public ModelAndView registerNewMember(@ModelAttribute RegistrationForm registrationForm, HttpSession session) {
       log.debug("Register New Member");
       ModelAndView mv = new ModelAndView();
 
@@ -63,29 +95,30 @@ public class AccountController extends BaseController {
       if (validateRegistrationForm(registrationForm, mv)) {
          // valid data.
          Account account = accountService.createNewAccount(registrationForm);
+         session.setAttribute("userAccount", account);
 
-         mv.setViewName("userhome");
          setUpHomePage(mv, account);
       } else {
          // data missing.
          mv.getModel().put("firstName", registrationForm.getFirstName());
          mv.getModel().put("lastName", registrationForm.getLastName());
          mv.getModel().put("nickName", registrationForm.getNickName());
+         mv.getModel().put("password", registrationForm.getPassword());
          mv.getModel().put("stateDropDown", setSelected(locationService.getAllStates(), registrationForm.getStateId()));
          int stateId = 1;
          if (StringUtils.hasText(registrationForm.getStateId())) {
-            stateId = Integer.valueOf(registrationForm.getStateId());
+            stateId = Integer.parseInt(registrationForm.getStateId());
          }
          String cityId = "*";
          if (StringUtils.hasText(registrationForm.getCityId())) {
             cityId = registrationForm.getCityId();
          }
          mv.getModel().put("cityDropDown", setSelected(locationService.getCitiesByStateId(stateId), cityId));
-         mv.getModel().put("categoryDropDown", setSelectedAt(clubService.getCategories(),
+         mv.getModel().put("categoryDropDown", setSelectedAt(clubService.getCategories("Choose"),
             registrationForm.getInterestOne()));
-         mv.getModel().put("categoryDropDown2", setSelectedAt(clubService.getCategories(),
+         mv.getModel().put("categoryDropDown2", setSelectedAt(clubService.getCategories("Choose"),
             registrationForm.getInterestTwo()));
-         mv.getModel().put("categoryDropDown3", setSelectedAt(clubService.getCategories(),
+         mv.getModel().put("categoryDropDown3", setSelectedAt(clubService.getCategories("Choose"),
             registrationForm.getInterestThree()));
          mv.setViewName("registration");
       }
@@ -94,8 +127,9 @@ public class AccountController extends BaseController {
    }
 
    @RequestMapping("/userHome")
-   public ModelAndView userHomePage(@PathVariable String accountId) {
-      Account account = accountService.getAccountById(Integer.valueOf(accountId));
+   public ModelAndView userHomePage(HttpSession session) {
+      log.debug("User Home Page");
+      Account account = (Account) session.getAttribute("userAccount");
       ModelAndView mv = getModelAndView(account.getNickName() + " - Home Page", "userHome");
 
       setUpHomePage(mv, account);
@@ -123,7 +157,26 @@ public class AccountController extends BaseController {
    }
 
    private void setUpHomePage(ModelAndView mv, Account account) {
+      mv.setViewName("userhome");
+      mv.getModel().put("loginUser", "true");
+      mv.getModel().put("navTitle", account.getNickName() + " - Home Page");
+      mv.getModel().put("title", "Hobby Club Home Page for " + account.getNickName());
+      mv.getModel().put("nickName", account.getNickName());
+      mv.getModel().put("categoryDropDown", clubService.getCategories("Choose"));
+   }
 
+   private boolean validateLogInForm(LogInForm form, ModelAndView mv) {
+      boolean valid = true;
+      if (!StringUtils.hasText(form.getNickName())) {
+         mv.getModel().put("missingNick", "true");
+         valid = false;
+      }
+      if (!StringUtils.hasText(form.getPassword())) {
+         mv.getModel().put("missingPass", "true");
+         valid = false;
+      }
+
+      return valid;
    }
 
    private boolean validateRegistrationForm(RegistrationForm form, ModelAndView mv) {
@@ -139,6 +192,20 @@ public class AccountController extends BaseController {
       if (StringUtils.hasText(form.getNickName())) {
          if (accountService.checkNickName(form.getNickName())) {
             mv.getModel().put("takenNick", "true");
+            mv.getModel().put("nickAlternative", accountService.getRandomNickName(form.getFirstName()));
+            valid = false;
+         }
+      }
+      if (!StringUtils.hasText(form.getPassword())) {
+         mv.getModel().put("noPass", "true");
+         valid = false;
+      } else {
+         String pass = form.getPassword().trim();
+         if (!StringUtils.hasText(pass)) {
+            mv.getModel().put("noPass", "true");
+            valid = false;
+         } else if (pass.length() < 10) {
+            mv.getModel().put("shortPass", "true");
             valid = false;
          }
       }

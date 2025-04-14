@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.abberkeep.hobbyclub.TestBase;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -20,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Gary Deken
  * @version
  */
-public abstract class BaseControllerTest {
+public abstract class TestBaseController extends TestBase {
 
    protected List<SelectOption> buildSelectOptions(int number) {
       List<SelectOption> so = new ArrayList<>();

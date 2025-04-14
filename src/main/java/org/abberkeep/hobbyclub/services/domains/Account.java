@@ -4,14 +4,18 @@
  */
 package org.abberkeep.hobbyclub.services.domains;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Title: Account
@@ -26,6 +30,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "accounts")
 public class Account {
+   public static final Character ACTIVE = 'A';
+   public static final Character DELETED = 'D';
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer accountId;
@@ -40,12 +46,15 @@ public class Account {
    private City city;
    private LocalDateTime createDatetime;
    private Character active;
+   private String hashPass;
+   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+   private Set<UserInterest> userInterests = new HashSet<>();
 
    public Account() {
    }
 
    public Account(Integer accountId, String firstName, String lastName, String nickName, State state, City city,
-      LocalDateTime createDatetime, Character active) {
+      LocalDateTime createDatetime, Character active, String hashPass) {
       this.accountId = accountId;
       this.firstName = firstName;
       this.lastName = lastName;
@@ -54,6 +63,11 @@ public class Account {
       this.city = city;
       this.createDatetime = createDatetime;
       this.active = active;
+      this.hashPass = hashPass;
+   }
+
+   public void addUserInterest(UserInterest userInterest) {
+      userInterests.add(userInterest);
    }
 
    public Integer getAccountId() {
@@ -88,6 +102,14 @@ public class Account {
       return active;
    }
 
+   public String getHashPass() {
+      return hashPass;
+   }
+
+   public Set<UserInterest> getUserInterests() {
+      return userInterests;
+   }
+
    public void setAccountId(Integer accountId) {
       this.accountId = accountId;
    }
@@ -118,6 +140,14 @@ public class Account {
 
    public void setActive(Character active) {
       this.active = active;
+   }
+
+   public void setUserInterests(Set<UserInterest> userInterests) {
+      this.userInterests = userInterests;
+   }
+
+   public void setHashPass(String hashPass) {
+      this.hashPass = hashPass;
    }
 
 }

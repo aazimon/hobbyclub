@@ -1,0 +1,1 @@
+nohup java -jar HobbyClub.jar > output.log 2>&1 &

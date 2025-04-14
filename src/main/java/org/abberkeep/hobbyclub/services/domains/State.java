@@ -33,10 +33,9 @@ public class State {
    public State() {
    }
 
-   public State(Integer stateId, String name, LocalDateTime createDatetime) {
+   public State(Integer stateId, String name) {
       this.stateId = stateId;
       this.name = name;
-      this.createDatetime = createDatetime;
    }
 
    public Integer getStateId() {

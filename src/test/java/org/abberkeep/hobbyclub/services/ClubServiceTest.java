@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
-import org.abberkeep.hobbyclub.TestUtils;
 import org.abberkeep.hobbyclub.controller.SelectOption;
 import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.repositories.CategoryRepository;
@@ -24,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author Gary Deken
  */
 @ExtendWith(MockitoExtension.class)
-public class ClubServiceTest {
+public class ClubServiceTest extends TestBaseService {
    @Mock
    private CategoryRepository categoryRepository;
    @InjectMocks
@@ -36,10 +35,10 @@ public class ClubServiceTest {
 
    @Test
    public void testGetCategories() {
-      List<Category> categories = TestUtils.buildCategories(6);
+      List<Category> categories = buildCategories(6);
       when(categoryRepository.findAllByOrderByNameAsc()).thenReturn(categories);
 
-      List<SelectOption> actual = underTest.getCategories();
+      List<SelectOption> actual = underTest.getCategories("Any");
 
       assertEquals(categories.size() + 1, actual.size());
       assertEquals("", actual.get(0).getValue());

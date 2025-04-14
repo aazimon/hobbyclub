@@ -38,11 +38,10 @@ public class City {
    public City() {
    }
 
-   public City(Integer cityId, String name, State state, LocalDateTime createDatetime) {
+   public City(Integer cityId, String name, State state) {
       this.cityId = cityId;
       this.name = name;
       this.state = state;
-      this.createDatetime = createDatetime;
    }
 
    public Integer getCityId() {

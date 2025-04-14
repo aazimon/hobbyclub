@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
-import org.abberkeep.hobbyclub.TestUtils;
 import org.abberkeep.hobbyclub.controller.SelectOption;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.State;
@@ -26,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author Gary Deken
  */
 @ExtendWith(MockitoExtension.class)
-public class LocationServiceTest {
+public class LocationServiceTest extends TestBaseService {
    @Mock
    private StateRepository stateRepository;
    @Mock
@@ -40,7 +39,7 @@ public class LocationServiceTest {
 
    @Test
    public void testGetAllStates() {
-      List<State> states = TestUtils.buildStates(2);
+      List<State> states = buildStates(2);
       when(stateRepository.findAll()).thenReturn(states);
 
       List<SelectOption> actual = underTest.getAllStates();
@@ -54,7 +53,7 @@ public class LocationServiceTest {
 
    @Test
    public void testGetAllCitiesByState() {
-      List<City> cities = TestUtils.buildCities(3);
+      List<City> cities = buildCities(3);
       when(cityRepository.findByState_StateId(12)).thenReturn(cities);
 
       List<SelectOption> actual = underTest.getCitiesByStateId(12);

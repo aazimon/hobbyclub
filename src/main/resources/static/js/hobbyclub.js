@@ -22,3 +22,45 @@ function activateStateCity() {
       }
    });
 }
+
+function validateNewClub() {
+   document.getElementById('invalidTitle').innerHTML = '';
+   document.getElementById('invalidCategory').innerHTML = '';
+   document.getElementById('invalidDescription').innerHTML = '';
+   var title = document.getElementById('newClubTitle').value.trim();
+   var category = document.getElementById('newClubCategory').value;
+   var description = document.getElementById('newClubDescription').value.trim();
+   var valid = true;
+
+   if (!description) {
+      // no description
+      document.getElementById('invalidDescription').innerHTML = '<p class="error">A Description is Required</p>';
+      valid = false;
+   }
+   if (!category) {
+      // no Category Selected
+      document.getElementById('invalidCategory').innerHTML = '<p class="error">A Category must be Selected</p>';
+      valid = false;
+   }
+   if (!title) {
+      // no title
+      document.getElementById('invalidTitle').innerHTML = '<p class="error">A Title is Required</p>';
+      valid = false;
+   }
+   if (valid) {
+      // check for duplicate Title per State, base on Logged in User's State
+      let url = `/ajax/newClub/${title}`
+      fetch(url).then(response => response.json())
+              .then(results => {
+                 let answer = Object.assign({}, {answer: results});
+                 if (answer === "valid") {
+                    // submit form.
+                 } else {
+                    document.getElementById('invalidTitle').innerHTML = '<p class="error">Club name is already taken. Please choose another.</p>';
+                 }
+              })
+              .catch(error => console.error('Error validationg Club Title', error));
+   }
+
+}
+

@@ -18,6 +18,7 @@ public class RegistrationForm {
    private String firstName;
    private String lastName;
    private String nickName;
+   private String password;
    private String stateId;
    private String CityId;
    private String interestOne;
@@ -34,6 +35,10 @@ public class RegistrationForm {
 
    public String getNickName() {
       return nickName;
+   }
+
+   public String getPassword() {
+      return password;
    }
 
    public String getStateId() {
@@ -66,6 +71,10 @@ public class RegistrationForm {
 
    public void setNickName(String nickName) {
       this.nickName = nickName;
+   }
+
+   public void setPassword(String password) {
+      this.password = password;
    }
 
    public void setStateId(String stateId) {

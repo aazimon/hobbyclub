@@ -7,6 +7,7 @@ package org.abberkeep.hobbyclub.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
@@ -31,11 +32,13 @@ import org.springframework.web.servlet.ModelAndView;
  * @version 1.0
  */
 @ExtendWith(MockitoExtension.class)
-public class HomeControllerTest extends BaseControllerTest {
+public class HomeControllerTest extends TestBaseController {
    @Mock
    private ClubService clubService;
    @Mock
    private LocationService locationService;
+   @Mock
+   private HttpSession session;
    @InjectMocks
    private HomeController underTest;
 
@@ -47,8 +50,8 @@ public class HomeControllerTest extends BaseControllerTest {
    public void testIndexPage() {
       when(locationService.getAllStates()).thenReturn(buildSelectOptions(10));
       when(locationService.getCitiesByStateId(1)).thenReturn(buildSelectOptions(3));
-      when(clubService.getCategories()).thenReturn(buildSelectOptions(4));
-      ModelAndView actual = underTest.indexPage();
+      when(clubService.getCategories("Any")).thenReturn(buildSelectOptions(4));
+      ModelAndView actual = underTest.indexPage(session);
 
       validateTitleView("Hobby Club", "lobby", actual);
       //assertEquals("-", actual.getModel().get("loginId"));

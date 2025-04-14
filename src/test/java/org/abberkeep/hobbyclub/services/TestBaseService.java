@@ -2,52 +2,61 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package org.abberkeep.hobbyclub;
+package org.abberkeep.hobbyclub.services;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.abberkeep.hobbyclub.TestBase;
 import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.State;
 
 /**
- * Title: TestUtils
+ * Title: BaseServiceTest
  *
  * <p>
  * Description: </p>
  *
- * Copyright (c) Apr 6, 2025
+ * Copyright (c) Apr 8, 2025
  * @author Gary Deken
  * @version
  */
-public class TestUtils {
+public class TestBaseService extends TestBase {
 
-   public static List<Category> buildCategories(int number) {
+   protected Category buildCategory(int id, String category) {
+      return new Category(id, category);
+   }
+
+   protected List<Category> buildCategories(int number) {
       List<Category> cats = new ArrayList<>();
 
       for (int i = 0; i < number; i++) {
-         cats.add(new Category(i + 1, "Cat" + i + " Club", LocalDateTime.now()));
+         cats.add(buildCategory(i + 1, "Cat" + i + " Club"));
       }
 
       return cats;
    }
 
-   public static List<City> buildCities(int number) {
+   protected List<City> buildCities(int number) {
       List<City> cities = new ArrayList<>();
+      State state = buildState(12, "ST12");
 
       for (int i = 0; i < number; i++) {
-         cities.add(new City(i + 1, "City" + i, new State(12, "ST12", LocalDateTime.now()), LocalDateTime.now()));
+         cities.add(buildCity(i, "City" + i, state));
       }
 
       return cities;
    }
 
-   public static List<State> buildStates(int number) {
+   protected City buildCity(int id, String city, State state) {
+      return new City(id + 1, city, state);
+   }
+
+   protected List<State> buildStates(int number) {
       List<State> states = new ArrayList<>();
 
       for (int i = 0; i < number; i++) {
-         states.add(new State(i + 1, "ST" + i, LocalDateTime.now()));
+         states.add(buildState(i, "ST" + i));
       }
 
       return states;

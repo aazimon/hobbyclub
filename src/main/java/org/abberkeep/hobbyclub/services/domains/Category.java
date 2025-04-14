@@ -33,10 +33,9 @@ public class Category {
    public Category() {
    }
 
-   public Category(Integer CategoryId, String name, LocalDateTime createDatetime) {
+   public Category(Integer CategoryId, String name) {
       this.CategoryId = CategoryId;
       this.name = name;
-      this.createDatetime = createDatetime;
    }
 
    public Integer getCategoryId() {

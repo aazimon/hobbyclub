@@ -4,9 +4,11 @@
  */
 package org.abberkeep.hobbyclub.controller;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
+import org.abberkeep.hobbyclub.services.domains.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +38,27 @@ public class HomeController extends BaseController {
    private ClubService clubService;
 
    @RequestMapping("/")
-   public ModelAndView indexPage() {
+   public ModelAndView indexPage(HttpSession session) {
       log.debug("Home Page Controller");
       ModelAndView mv = getModelAndView("Hobby Club", "lobby");
 
       // TODO check if user logged in.
-      //mv.getModel().put("loginId", "-");
-      mv.getModel().put("categoryDropDown", clubService.getCategories());
-      mv.getModel().put("stateDropDown", locationService.getAllStates());
-      mv.getModel().put("cityDropDown", locationService.getCitiesByStateId(1));
+      if (session.getAttribute("userAccount") != null) {
+         Account account = (Account) session.getAttribute("userAccount");
+         //mv.getModel().put("loginId", "-");
+      }
+      setUpHomePage(mv);
 
+      return mv;
+   }
+
+   @RequestMapping("/logout")
+   public ModelAndView logout(HttpSession session) {
+      log.debug("Log Out");
+      session.invalidate();
+      ModelAndView mv = getModelAndView("Hobby Club", "lobby");
+
+      setUpHomePage(mv);
       return mv;
    }
 
@@ -55,6 +68,12 @@ public class HomeController extends BaseController {
       log.debug("Get Cities Controller");
 
       return locationService.getCitiesByStateId(Integer.valueOf(stateId));
+   }
+
+   private void setUpHomePage(ModelAndView mv) {
+      mv.getModel().put("categoryDropDown", clubService.getCategories("Any"));
+      mv.getModel().put("stateDropDown", locationService.getAllStates());
+      mv.getModel().put("cityDropDown", locationService.getCitiesByStateId(1));
    }
 
 }

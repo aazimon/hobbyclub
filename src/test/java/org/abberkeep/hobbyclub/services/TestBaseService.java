@@ -9,6 +9,7 @@ import java.util.List;
 import org.abberkeep.hobbyclub.TestBase;
 import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.domains.City;
+import org.abberkeep.hobbyclub.services.domains.Club;
 import org.abberkeep.hobbyclub.services.domains.State;
 
 /**
@@ -22,10 +23,6 @@ import org.abberkeep.hobbyclub.services.domains.State;
  * @version
  */
 public class TestBaseService extends TestBase {
-
-   protected Category buildCategory(int id, String category) {
-      return new Category(id, category);
-   }
 
    protected List<Category> buildCategories(int number) {
       List<Category> cats = new ArrayList<>();
@@ -48,8 +45,13 @@ public class TestBaseService extends TestBase {
       return cities;
    }
 
-   protected City buildCity(int id, String city, State state) {
-      return new City(id + 1, city, state);
+   protected List<Club> buildClubs(int number) {
+      List<Club> c = new ArrayList<>();
+
+      for (int i = 0; i < number; i++) {
+         c.add(buildClub(i, "Title" + i));
+      }
+      return c;
    }
 
    protected List<State> buildStates(int number) {

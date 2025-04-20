@@ -39,6 +39,7 @@ public class LocationService {
       List<State> states = stateRepository.findAll();
       List<SelectOption> display = new ArrayList<>();
 
+      display.add(new SelectOption("0", "Any State"));
       states.forEach(state -> display.add(new SelectOption(state.getStateId().toString(), state.getName())));
 
       return display;
@@ -58,7 +59,7 @@ public class LocationService {
       List<City> cities = cityRepository.findByState_StateId(stateId);
       List<SelectOption> display = new ArrayList<>();
 
-      display.add(new SelectOption("*", "Any City"));
+      display.add(new SelectOption("0", "Any City"));
       cities.forEach(city -> display.add(new SelectOption(city.getCityId().toString(), city.getName())));
 
       return display;

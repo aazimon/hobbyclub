@@ -54,6 +54,7 @@ CREATE TABLE `accounts` (
 COMMENT='Accounts for each registered user of Hobby Club'
 COLLATE='latin1_general_ci' ENGINE=InnoDB;
 commit;
+
 # Create user interest
 CREATE TABLE `userinterest` (
 	`account_id` INT(11) NOT NULL, `category_id` INT(11) NOT NULL,
@@ -66,7 +67,8 @@ COMMENT='Linking Users to their category interest.' COLLATE='latin1_general_ci' 
 commit;
 # Create the main clubs table.
 CREATE TABLE `clubs` (
-	`club_id` INT(11) NOT NULL, `name` VARCHAR(100) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
+	`club_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(100) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
 	`description` VARCHAR(1000) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
 	`city_id` INT(11) NOT NULL, `state_id` INT(11) NOT NULL,
 	`category_id` INT(11) NOT NULL, `creator_id` INT(11) NOT NULL,
@@ -81,7 +83,8 @@ CREATE TABLE `clubs` (
 	CONSTRAINT `FK_Club_Account` FOREIGN KEY (`creator_id`) REFERENCES `accounts` (`account_id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
 	CONSTRAINT `FK_Club_Category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
 	CONSTRAINT `FK_Club_City` FOREIGN KEY (`city_id`) REFERENCES `city` (`city_id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
-	CONSTRAINT `FK_Club_State` FOREIGN KEY (`state_id`) REFERENCES `state` (`state_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )
+	CONSTRAINT `FK_Club_State` FOREIGN KEY (`state_id`) REFERENCES `state` (`state_id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
 COMMENT='Hobby Clubs that users are allowed to join, post to and schedule events.'
 COLLATE='latin1_general_ci' ENGINE=InnoDB;
 
@@ -97,7 +100,8 @@ COLLATE='latin1_general_ci' ENGINE=InnoDB;
 commit;
 # Events
 CREATE TABLE `events` (
-	`event_id` INT(11) NOT NULL, `title` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
+	`event_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`title` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
 	`details` VARCHAR(500) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
 	`datetime` DATETIME NOT NULL DEFAULT current_timestamp(),
 	`account_id` INT(11) NOT NULL DEFAULT '0',
@@ -124,7 +128,8 @@ commit;
 
 # Topics
 CREATE TABLE `topics` (
-	`topic_id` INT(11) NOT NULL, `club_id` INT(11) NOT NULL, `account_id` INT(11) NOT NULL,
+	`topic_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`club_id` INT(11) NOT NULL, `account_id` INT(11) NOT NULL,
 	`title` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
 	`message` VARCHAR(300) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
 	`create_datetime` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
@@ -135,7 +140,8 @@ CREATE TABLE `topics` (
 COMMENT='Topics by members of a club.' COLLATE='latin1_general_ci' ENGINE=InnoDB;
 
 CREATE TABLE `replies` (
-	`reply_id` INT(11) NOT NULL, `topic_id` INT(11) NOT NULL, `account_id` INT(11) NOT NULL,
+	`reply_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`topic_id` INT(11) NOT NULL, `account_id` INT(11) NOT NULL,
 	`message` VARCHAR(300) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
 	`create_datetime` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
 	PRIMARY KEY (`reply_id`) USING BTREE, INDEX `FK_Reply_Account` (`account_id`) USING BTREE,

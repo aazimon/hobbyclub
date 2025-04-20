@@ -38,3 +38,4 @@ nbactions.xml
 /nbproject/
 /nb-configuration.xml
 /UserPass.txt
+/src/test/java/org/abberkeep/hobbyclub/SqlTest.java

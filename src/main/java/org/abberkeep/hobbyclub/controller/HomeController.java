@@ -5,6 +5,9 @@
 package org.abberkeep.hobbyclub.controller;
 
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
@@ -14,7 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,11 +47,7 @@ public class HomeController extends BaseController {
       log.debug("Home Page Controller");
       ModelAndView mv = getModelAndView("Hobby Club", "lobby");
 
-      // TODO check if user logged in.
-      if (session.getAttribute("userAccount") != null) {
-         Account account = (Account) session.getAttribute("userAccount");
-         //mv.getModel().put("loginId", "-");
-      }
+      setUpLoggedInUser(session, mv);
       setUpHomePage(mv);
 
       return mv;
@@ -70,10 +71,65 @@ public class HomeController extends BaseController {
       return locationService.getCitiesByStateId(Integer.valueOf(stateId));
    }
 
+   @PostMapping("/searchClubs")
+   public ModelAndView searchClubs(@ModelAttribute SearchForm search, HttpSession session) {
+      log.debug("Search Clubs Page");
+      ModelAndView mv = getModelAndView("Hobby Clubs - Search", "search");
+
+      setUpLoggedInUser(session, mv);
+      // repopulate form.
+      mv.getModel().put("clubName", search.getClubName());
+      mv.getModel().put("categoryDropDown", setSelected(clubService.getCategories("Any"), search.getCategoryId()));
+      mv.getModel().put("stateDropDown", setSelected(locationService.getAllStates(), search.getStateId()));
+      if ("0".equals(search.getStateId())) {
+         // if no state is selected, City drop down would be Any City.
+         mv.getModel().put("cityDropDown", Arrays.asList(new SelectOption("0", "Any City")));
+      } else {
+         mv.getModel().put("cityDropDown", setSelected(locationService.getCitiesByStateId(Integer.valueOf(
+            search.getStateId())), search.getCityId()));
+      }
+      List<ClubDisplay> searchClubs = clubService.searchClubs(search);
+      populateClubLists(searchClubs, mv);
+
+      return mv;
+   }
+
    private void setUpHomePage(ModelAndView mv) {
       mv.getModel().put("categoryDropDown", clubService.getCategories("Any"));
       mv.getModel().put("stateDropDown", locationService.getAllStates());
-      mv.getModel().put("cityDropDown", locationService.getCitiesByStateId(1));
+      mv.getModel().put("cityDropDown", Arrays.asList(new SelectOption("0", "Any City")));
+
+      List<ClubDisplay> popClubs = clubService.getPopularClubs();
+      populateClubLists(popClubs, mv);
+   }
+
+   private void setUpLoggedInUser(HttpSession session, ModelAndView mv) {
+      if (session.getAttribute("userAccount") != null) {
+         Account account = (Account) session.getAttribute("userAccount");
+         setUserLoggedIn(mv, account);
+      }
+   }
+
+   private void populateClubLists(List<ClubDisplay> popClubs, ModelAndView mv) {
+      if (!popClubs.isEmpty()) {
+         // Get the most popular to highlight at top.
+         ClubDisplay mostPopular = popClubs.remove(0);
+         mv.getModel().put("mostPopular", mostPopular);
+         if (!popClubs.isEmpty()) {
+            // if more popular ones, get them to fill the page.
+            if (popClubs.size() % 2 == 1) {
+               ClubDisplay lastClub = popClubs.remove(popClubs.size() - 1);
+               mv.getModel().put("lastClub", lastClub);
+            }
+            List<ClubRow> rows = new ArrayList<>();
+
+            for (Iterator<ClubDisplay> iterator = popClubs.iterator(); iterator.hasNext();) {
+               rows.add(new ClubRow(iterator.next(), iterator.next()));
+            }
+
+            mv.getModel().put("popularClubs", rows);
+         }
+      }
    }
 
 }

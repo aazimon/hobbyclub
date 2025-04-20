@@ -9,14 +9,14 @@
                <h1>Find your Club</h1>
                <form method="post" action="/searchClubs">
                   <div class="row mx-1">
-                     <input type="search" class="form-control" id="clubName" name="clubName" placeholder="Search for Club">
+                     <input type="search" class="form-control" id="clubName" name="clubName" placeholder="Search for Club"{{#clubName}} value="{{clubName}}"{{/clubName}}>
                   </div>
                   <div class="row">
                      <div class="col-md-6">
                         <h3>Club Categories</h3>
                         <select class="form-select" id="categoryId" name="categoryId" aria-label="Select Club Type">
                            {{#categoryDropDown}}
-                           <option value="{{value}}">{{label}}</option>
+                           <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
                            {{/categoryDropDown}}
                         </select>
                      </div>
@@ -26,7 +26,7 @@
                         <h3>Location: State</h3>
                         <select class="form-select" id="stateId" name="stateId" aria-label="Select State">
                            {{#stateDropDown}}
-                           <option value="{{value}}">{{label}}</option>
+                           <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
                            {{/stateDropDown}}
                         </select>
                      </div>
@@ -40,7 +40,7 @@
                      <div class="col-md-4">
                         <select class="form-select" id="cityId" name="cityId" aria-label="Select Club Type">
                            {{#cityDropDown}}
-                           <option value="{{value}}">{{label}}</option>
+                           <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
                            {{/cityDropDown}}
                         </select>
                      </div>
@@ -52,7 +52,7 @@
                </form>
             </div>
             <div class="col-md-6">
-               <h1>Most Popular Clubs</h1>
+               <h1>Most Popular Clubs for Search Results</h1>
                {{#mostPopular}}
                <div class="card mx-2 p-3">
                   <div class="card-body">
@@ -111,3 +111,4 @@
       {{>layout/cities}}
    </body>
 </html>
+

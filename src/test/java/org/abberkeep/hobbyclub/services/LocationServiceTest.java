@@ -44,11 +44,13 @@ public class LocationServiceTest extends TestBaseService {
 
       List<SelectOption> actual = underTest.getAllStates();
 
-      assertEquals(states.size(), actual.size());
-      assertEquals(states.get(0).getStateId().toString(), actual.get(0).getValue());
-      assertEquals(states.get(0).getName(), actual.get(0).getLabel());
-      assertEquals(states.get(1).getStateId().toString(), actual.get(1).getValue());
-      assertEquals(states.get(1).getName(), actual.get(1).getLabel());
+      assertEquals(states.size() + 1, actual.size());
+      assertEquals("0", actual.get(0).getValue());
+      assertEquals("Any State", actual.get(0).getLabel());
+      assertEquals(states.get(0).getStateId().toString(), actual.get(1).getValue());
+      assertEquals(states.get(0).getName(), actual.get(1).getLabel());
+      assertEquals(states.get(1).getStateId().toString(), actual.get(2).getValue());
+      assertEquals(states.get(1).getName(), actual.get(2).getLabel());
    }
 
    @Test
@@ -59,7 +61,7 @@ public class LocationServiceTest extends TestBaseService {
       List<SelectOption> actual = underTest.getCitiesByStateId(12);
 
       assertEquals(cities.size() + 1, actual.size());
-      assertEquals("*", actual.get(0).getValue());
+      assertEquals("0", actual.get(0).getValue());
       assertEquals("Any City", actual.get(0).getLabel());
       assertEquals(cities.get(0).getCityId().toString(), actual.get(1).getValue());
       assertEquals(cities.get(0).getName(), actual.get(1).getLabel());

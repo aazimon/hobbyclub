@@ -23,6 +23,10 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public abstract class TestBaseController extends TestBase {
 
+   protected ClubDisplay buildClubDescription(String id, String title) {
+      return new ClubDisplay(id, title, "This is a basic Description");
+   }
+
    protected List<SelectOption> buildSelectOptions(int number) {
       List<SelectOption> so = new ArrayList<>();
 
@@ -31,12 +35,6 @@ public abstract class TestBaseController extends TestBase {
       }
 
       return so;
-   }
-
-   protected void validateSelectedFalse(List<SelectOption> so) {
-      for (SelectOption selectOption : so) {
-         assertFalse(selectOption.getSelected());
-      }
    }
 
    protected void validateTitleView(String expectedTitle, String expectedView, ModelAndView actual) {

@@ -49,18 +49,50 @@ function validateNewClub() {
    }
    if (valid) {
       // check for duplicate Title per State, base on Logged in User's State
-      let url = `/ajax/newClub/${title}`
-      fetch(url).then(response => response.json())
-              .then(results => {
-                 let answer = Object.assign({}, {answer: results});
-                 if (answer === "valid") {
-                    // submit form.
-                 } else {
-                    document.getElementById('invalidTitle').innerHTML = '<p class="error">Club name is already taken. Please choose another.</p>';
-                 }
-              })
-              .catch(error => console.error('Error validationg Club Title', error));
+      let url = `/ajax/validateClub/${title}`;
+      fetch(url).then(response => {
+         if (!response.ok) {
+            document.getElementById('invalidTitle').innerHTML = '<p class="error">Club name is already taken. Please choose another.</p>';
+         } else {
+            // submit form.
+            var club = {
+               title: title,
+               category: category,
+               description: description
+            };
+            saveNewClub(club);
+         }
+      }).catch(error => {
+         console.error('Error validating Club Title', error);
+         document.getElementById('invalidTitle').innerHTML = '<p class="error">Unexpected Error. Please Try again later.</p>';
+      });
    }
-
 }
 
+function saveNewClub(club) {
+   let url = `/ajax/saveClub`;
+   $.ajax({
+      type: "POST",
+      url: url,
+      contentType: "application/json",
+      data: JSON.stringify(club),
+      success: function (data) {
+         let base = document.getElementById('yourClubTemplate').innerHTML;
+         base = doubler(base, '{');
+         const template = doubler(base, '}');
+         const rendered = Mustache.render(template, {club: data});
+         document.getElementById('yourClubList').innerHTML += rendered;
+         var modalEl = document.getElementById('newClub');
+         var modalInst = bootstrap.Modal.getInstance(modalEl);
+
+         document.getElementById('newClubTitle').value = '';
+         document.getElementById('newClubCategory').selectedIndex = 0;
+         document.getElementById('newClubDescription').value = '';
+         modalInst.hide();
+      },
+      error: function (data) {
+         console.error('Error saving Club', data);
+         document.getElementById('invalidTitle').innerHTML = '<p class="error">Unexpected Error. Please Try again later.</p>';
+      }
+   });
+}

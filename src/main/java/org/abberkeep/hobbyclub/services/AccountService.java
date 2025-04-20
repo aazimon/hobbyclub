@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Random;
 import org.abberkeep.hobbyclub.controller.RegistrationForm;
 import org.abberkeep.hobbyclub.services.domains.Account;
+import org.abberkeep.hobbyclub.services.domains.Status;
 import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.domains.UserInterest;
 import org.abberkeep.hobbyclub.services.repositories.AccountRepository;
@@ -99,7 +100,7 @@ public class AccountService {
 
       acc.setState(locationService.getStateById(Integer.valueOf(regForm.getStateId())));
       acc.setCity(locationService.getCityById(Integer.valueOf(regForm.getCityId())));
-      acc.setActive(Account.ACTIVE);
+      acc.setActive(Status.ACTIVE.getState());
       // save user interests
       if (StringUtils.hasText(regForm.getInterestOne())) {
          Category cat = categoryService.getCategoryById(Integer.valueOf(regForm.getInterestOne()));

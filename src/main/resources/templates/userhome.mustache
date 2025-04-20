@@ -18,10 +18,17 @@
                   <h2>Clubs you joined</h2>
                </div>
                <div class="row align-items-center">
-                  <div class="col"><h5>You Clubs</h5></div>
+                  <div class="col"><h5>Your Clubs</h5></div>
                   <div class="col-auto">
                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newClub">Create New</button>
                   </div>
+               </div>
+               <div id="yourClubList" style="max-height: 130px; overflow-y: auto;" class="border rounded p-1">
+                  {{#yourClubs}}
+                  <div class="row w-100 pl-10px">
+                     <div class="border p-2"><a href="/clubHome/{{id}}" style="text-decoration: none;">{{name}}</a></div>
+                  </div>
+                  {{/yourClubs}}
                </div>
             </div>
          </div>
@@ -70,5 +77,6 @@
             </div>
          </div>
       </div>
+      {{>layout/yourclub}}
    </body>
 </html>

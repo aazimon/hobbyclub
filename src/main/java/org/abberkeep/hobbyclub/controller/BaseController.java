@@ -4,6 +4,9 @@
  */
 package org.abberkeep.hobbyclub.controller;
 
+import java.util.List;
+import org.abberkeep.hobbyclub.services.domains.Account;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -25,6 +28,31 @@ public class BaseController {
       mv.setViewName(view);
 
       return mv;
+   }
+
+   protected List<SelectOption> setSelected(List<SelectOption> options, String value) {
+      String valueId = "1";
+      if (StringUtils.hasText(value)) {
+         valueId = value;
+      }
+
+      return setSelectedAt(options, valueId);
+   }
+
+   protected List<SelectOption> setSelectedAt(List<SelectOption> options, String value) {
+      for (SelectOption opt : options) {
+         if (opt.getValue().equals(value)) {
+            opt.setSelected(true);
+            break;
+         }
+      }
+
+      return options;
+   }
+
+   protected void setUserLoggedIn(ModelAndView mv, Account account) {
+      mv.getModel().put("loginUser", "true");
+      mv.getModel().put("nickName", account.getNickName());
    }
 
 }

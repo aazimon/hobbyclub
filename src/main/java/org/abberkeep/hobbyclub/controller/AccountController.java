@@ -109,7 +109,7 @@ public class AccountController extends BaseController {
          if (StringUtils.hasText(registrationForm.getStateId())) {
             stateId = Integer.parseInt(registrationForm.getStateId());
          }
-         String cityId = "*";
+         String cityId = "0";
          if (StringUtils.hasText(registrationForm.getCityId())) {
             cityId = registrationForm.getCityId();
          }
@@ -130,39 +130,20 @@ public class AccountController extends BaseController {
    public ModelAndView userHomePage(HttpSession session) {
       log.debug("User Home Page");
       Account account = (Account) session.getAttribute("userAccount");
-      ModelAndView mv = getModelAndView(account.getNickName() + " - Home Page", "userHome");
+      ModelAndView mv = new ModelAndView();
 
       setUpHomePage(mv, account);
 
       return mv;
    }
 
-   private List<SelectOption> setSelected(List<SelectOption> options, String value) {
-      String valueId = "1";
-      if (StringUtils.hasText(value)) {
-         valueId = value;
-      }
-
-      return setSelectedAt(options, valueId);
-   }
-
-   private List<SelectOption> setSelectedAt(List<SelectOption> options, String value) {
-      for (SelectOption opt : options) {
-         if (opt.getValue().equals(value)) {
-            opt.setSelected(true);
-         }
-      }
-
-      return options;
-   }
-
    private void setUpHomePage(ModelAndView mv, Account account) {
       mv.setViewName("userhome");
-      mv.getModel().put("loginUser", "true");
+      setUserLoggedIn(mv, account);
       mv.getModel().put("navTitle", account.getNickName() + " - Home Page");
       mv.getModel().put("title", "Hobby Club Home Page for " + account.getNickName());
-      mv.getModel().put("nickName", account.getNickName());
       mv.getModel().put("categoryDropDown", clubService.getCategories("Choose"));
+      mv.getModel().put("yourClubs", clubService.getYourClubs(account.getAccountId()));
    }
 
    private boolean validateLogInForm(LogInForm form, ModelAndView mv) {

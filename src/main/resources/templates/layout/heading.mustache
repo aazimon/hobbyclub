@@ -1,22 +1,22 @@
 <nav class="navbar navbar-static-top">
    <div class="container">
       <div class="navbar-brand w-25 d-none d-md-block">
-         <a href="/"><img src="HobbyClub-large.png" class="img-fluid" alt="Hobby Club"/></a>
+         <a href="/"><img src="/HobbyClub-large.png" class="img-fluid" alt="Hobby Club"/></a>
       </div>
       <div class="navbar-brand w-25 d-md-none d-block">
-         <a href="/"><img src="HobbyClub-small.png" class="img-fluid" alt="Hobby Club"/></a>
+         <a href="/"><img src="/HobbyClub-small.png" class="img-fluid" alt="Hobby Club"/></a>
       </div>
       {{#navTitle}}
       <div><h4>{{navTitle}}</h4></div>
       {{/navTitle}}
       <div>
          {{#loginUser}}
-         <div class="row"><h2><a href="userHome">{{nickName}} Page</a></h2></div>
-         <div class="row"><a href="logout">Log Out</a></div>
+         <div class="row"><h2><a href="/userHome">{{nickName}} Page</a></h2></div>
+         <div class="row"><a href="/logout">Log Out</a></div>
          {{/loginUser}}
          {{^loginUser}}
-         <div class="row"><a class="btn btn-outline-secondary" href="login">Sign in</a></div>
-         <div class="row"><a href="registration">Become a Member</a></div>
+         <div class="row"><a class="btn btn-outline-secondary" href="/login">Sign in</a></div>
+         <div class="row"><a href="/registration">Become a Member</a></div>
          {{/loginUser}}
       </div>
    </div>

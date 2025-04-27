@@ -6,9 +6,13 @@ package org.abberkeep.hobbyclub.controller;
 
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import org.abberkeep.hobbyclub.controller.dto.LogInForm;
+import org.abberkeep.hobbyclub.controller.dto.RegistrationForm;
 import org.abberkeep.hobbyclub.services.AccountService;
 import org.abberkeep.hobbyclub.services.ClubService;
+import org.abberkeep.hobbyclub.services.EventService;
 import org.abberkeep.hobbyclub.services.LocationService;
+import org.abberkeep.hobbyclub.services.TopicService;
 import org.abberkeep.hobbyclub.services.domains.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +43,10 @@ public class AccountController extends BaseController {
    private AccountService accountService;
    @Autowired
    private ClubService clubService;
+   @Autowired
+   private TopicService topicService;
+   @Autowired
+   private EventService eventService;
 
    @RequestMapping("/login")
    public ModelAndView login() {
@@ -143,7 +151,11 @@ public class AccountController extends BaseController {
       mv.getModel().put("navTitle", account.getNickName() + " - Home Page");
       mv.getModel().put("title", "Hobby Club Home Page for " + account.getNickName());
       mv.getModel().put("categoryDropDown", clubService.getCategories("Choose"));
-      mv.getModel().put("yourClubs", clubService.getYourClubs(account.getAccountId()));
+      mv.getModel().put("yourClubEvents", eventService.getEventsForUserClubs(account));
+      mv.getModel().put("yourEvents", eventService.getEventsForUsers(account));
+      mv.getModel().put("yourCreatedClubs", clubService.getYourCreatedClubs(account.getAccountId()));
+      mv.getModel().put("yourJoinedClubs", clubService.getYourJoinedClubs(account.getAccountId()));
+      mv.getModel().put("yourTopics", topicService.getTopicsForUser(account.getAccountId()));
    }
 
    private boolean validateLogInForm(LogInForm form, ModelAndView mv) {

@@ -2,50 +2,50 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package org.abberkeep.hobbyclub.controller;
+package org.abberkeep.hobbyclub.controller.dto;
 
 /**
- * Title: ClubForm
+ * Title: ClubDescription
  *
  * <p>
  * Description: </p>
  *
- * Copyright (c) Apr 14, 2025
+ * Copyright (c) Apr 17, 2025
  * @author Gary Deken
  * @version
  */
-public class ClubForm {
+public class ClubDisplay {
+   private String id;
    private String title;
-   private String category;
    private String description;
 
-   public ClubForm() {
+   public ClubDisplay() {
    }
 
-   public ClubForm(String title, String category, String description) {
+   public ClubDisplay(String id, String title, String description) {
+      this.id = id;
       this.title = title;
-      this.category = category;
       this.description = description;
+   }
+
+   public String getId() {
+      return id;
    }
 
    public String getTitle() {
       return title;
    }
 
-   public String getCategory() {
-      return category;
-   }
-
    public String getDescription() {
       return description;
    }
 
-   public void setTitle(String title) {
-      this.title = title;
+   public void setId(String id) {
+      this.id = id;
    }
 
-   public void setCategory(String category) {
-      this.category = category;
+   public void setTitle(String title) {
+      this.title = title;
    }
 
    public void setDescription(String description) {

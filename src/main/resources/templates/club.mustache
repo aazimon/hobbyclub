@@ -1,20 +1,199 @@
 <!DOCTYPE html>
 <html>
    {{>layout/head}}
-   <body>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+   <script>
+$(function () {
+   $("#newEventDate").datetimepicker();
+});
+   </script>
+   <body onload="activateStateCity()">
       {{>layout/heading}}
       <div class="container">
          <div class="row">
-            <div class="col-12 col-md-6"><h1>Upcoming Events</h1></div>
             <div class="col-12 col-md-6">
-               {{#loginUser}}
-               {{^userClub}}
-               <a class="btn btn-primary" href="/joinClub/{{clubId}}">Join Club</a>
+               {{#clubMessage}}
+               <div class="row">
+                  <div class="col-6"><p class="success">{{clubMessage}}</p></div>
+               </div>
+               {{/clubMessage}}
+               <div class="row">
+                  <div class="col-8"><h1>Upcoming Events</h1></div>
+                  <div class="col-4">
+                     {{#loginUser}}
+                     {{#userClub}}
+                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newEvent">Add Event</button>
+                     {{/userClub}}
+                     {{/loginUser}}
+                  </div>
+               </div>
+               <div class="row">
+                  <div style="max-height: 600px; overflow-y: auto;" class="border rounded p-1">
+                     {{#clubEvents}}
+                     <div class="row w-100">
+                        <div class="border ms-2 row">
+                           <div class="row"><h2>{{title}}</h2></div>
+                           <div class="row"><p>{{details}}</p></div>
+                           <div class="row"><p>At {{location}} on {{dateTime}}. Organized by {{organizer}}</p></div>
+                           <div class="row m-1">
+                              {{#userClub}}
+                              {{#ownEvent}}
+                              <div class="col-3 small p-0">Will attend: {{willAttend}}</div>
+                              <div class="col-3 small p-0">May attend: {{mayAttend}}</div>
+                              <div class="col-3 small p-0">Interested: {{interested}}</div>
+                              <div class="col-3 small p-0">Not Interested: {{none}}</div>
+                              {{/ownEvent}}
+                              {{^ownEvent}}
+                              <div class="col-3 p-0"><a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/WA" role="button">Will Attend: {{willAttend}}</a></div>
+                              <div class="col-3 p-0"><a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/MA" role="button">May Attend: {{mayAttend}}</a></div>
+                              <div class="col-3 p-0"><a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/IE" role="button">Interested: {{interested}}</a></div>
+                              <div class="col-3 p-0"><a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/NI" role="button">Not Interested: {{none}}</a></div>
+                              {{/ownEvent}}
+                              {{/userClub}}
+                              {{^userClub}}
+                              <div class="col-3 small p-0">Will attend: {{willAttend}}</div>
+                              <div class="col-3 small p-0">May attend: {{mayAttend}}</div>
+                              <div class="col-3 small p-0">Interested: {{interested}}</div>
+                              <div class="col-3 small p-0">Not Interested: {{none}}</div>
+                              {{/userClub}}
+                           </div>
+                        </div>
+                     </div>
+                     {{/clubEvents}}
+                  </div>
+               </div>
+            </div>
+            <div class="col-12 col-md-6">
+               <div class="row">
+                  <div class="col">
+                     {{#loginUser}}
+                     {{^userClub}}
+                     <a class="btn btn-primary" href="/joinClub/{{clubId}}">Join Club</a>
+                     {{/userClub}}
+                     {{/loginUser}}
+                  </div>
+               </div>
+               {{#userClub}}
+               <div class="row">
+                  <div class="col"><h1>What's on your Mind:</h1></div>
+               </div>
+               <div class="row">
+                  <form action="/postTopic" method="post">
+                     <div class="row">
+                        <div class="col-8">
+                           <input class="form-control" id="post" name="post">
+                           <input type="hidden" id="clubId" name="clubId" value="{{clubId}}">
+                        </div>
+                        <div class="col-2"><button id="postTopic" type="submit" class="btn btn-primary">Post</button></div>
+                     </div>
+                  </form>
+               </div>
                {{/userClub}}
-               {{/loginUser}}
-               <h1>What's on your Mind:</h1></div>
+               <div class="row">
+                  <div style="max-height: 600px; overflow-y: auto;" class="border rounded p-1">
+                     {{#clubTopics}}
+                     <div class="row w-100">
+                        <div class="border ms-2">
+                           <div class="row">
+                              <div class="col-5">{{poster}}</div>
+                              <div class="col">{{postDate}}</div>
+                           </div>
+                           <div class="row">
+                              <div class="col"><p>{{message}}</p></div>
+                           </div>
+                           {{#userClub}}
+                           <form action="/postReply" method="post">
+                              <div class="row">
+                                 <div class="col-8">
+                                    <input class="form-control" id="post" name="post">
+                                    <input type="hidden" id="clubId" name="clubId" value="{{clubId}}">
+                                    <input type="hidden" id="topicId" name="topicId" value="{{topicId}}">
+                                 </div>
+                                 <div class="col-2"><button id="postTopic" type="submit" class="btn btn-primary">Reply</button></div>
+                              </div>
+                           </form>
+                           {{/userClub}}
+                           {{#replies}}
+                           <div class="row">
+                              <div class="col-5 ms-3">{{poster}}</div>
+                              <div class="col">{{postDate}}</div>
+                           </div>
+                           <div class="row">
+                              <div class="col ms-3"><p>{{message}}</p></div>
+                           </div>
+                           {{/replies}}
+                        </div>
+                     </div>
+                     {{/clubTopics}}
+                  </div>
+               </div>
+            </div>
          </div>
       </div>
+
+
+      <!-- New Event Pop-up modal -->
+      <div class="modal fade" id="newEvent" tabindex="-1" aria-labelledby="NewEventModal" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <div class="row">
+                     <h5 class="modal-title" id="myModalLabel">Add New Event</h5>
+                  </div>
+               </div>
+               <form action="/addEvent/{{clubId}}" onsubmit="return validateNewEvent()" method="post">
+                  <div class="modal-body">
+                     <div class="row"><div class="col"><span id="invalidTitle"></span></div></div>
+                     <div class="row">
+                        <div class="col-2"><label for="newEventTitle" class="form-label">Title:</label></div>
+                        <div class="col"><input class="form-control" id="newEventTitle" name="newEventTitle" placeholder="Event Title"></div>
+                     </div>
+                     <div class="row"><div class="col"><span id="invalidDetails"></span></div></div>
+                     <div class="row">
+                        <div class="col-2"><label for="newEventDetails" class="form-label">Details:</label></div>
+                        <div class="col">
+                           <textarea class="form-control" id="newEventDetails" name="newEventDetails" rows="4"></textarea>
+                        </div>
+                     </div>
+                     <div class="row"><div class="col"><span id="invalidDate"></span></div></div>
+                     <div class="row">
+                        <div class="col-2"><label for="newEventDate" class="form-label">Date:</label></div>
+                        <div class="col">
+                           <input type="text" class="form-control" id="newEventDate" name="newEventDate" />
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row"><div class="col"><span id="invalidState"></span></div></div>
+                  <div class="row">
+                     <div class="col-2 ms-3"><label for="stateId" class="form-label">State:</label></div>
+                     <div class="col me-3">
+                        <select class="form-select" id="stateId" name="stateId" aria-label="Select State">
+                           {{#stateDropDown}}
+                           <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+                           {{/stateDropDown}}
+                        </select>
+                     </div>
+                  </div>
+                  <div class="row"><div class="col"><span id="invalidCity"></span></div></div>
+                  <div class="row">
+                     <div class="col-2 ms-3"><label for="cityId" class="form-label">City:</label></div>
+                     <div class="col me-3">
+                        <select class="form-select" id="cityId" name="cityId" aria-label="Select City">
+                           {{#cityDropDown}}
+                           <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+                           {{/cityDropDown}}
+                        </select>
+                     </div>
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                     <button id="addEvent" type="submit" class="btn btn-primary">Add Event</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+      {{>layout/cities}}
    </body>
 </html>
-

@@ -105,13 +105,17 @@ CREATE TABLE `events` (
 	`details` VARCHAR(500) NOT NULL DEFAULT '' COLLATE 'latin1_general_ci',
 	`datetime` DATETIME NOT NULL DEFAULT current_timestamp(),
 	`account_id` INT(11) NOT NULL DEFAULT '0',
-	`city_id` INT(11) NULL DEFAULT NULL, `state_id` INT(11) NULL DEFAULT NULL,
+	`city_id` INT(11) NOT NULL, `state_id` INT(11) NOT NULL,
 	`create_datetime` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-	PRIMARY KEY (`event_id`) USING BTREE, INDEX `FK_Event_Account` (`account_id`) USING BTREE,
+	`club_id` INT(11) NOT NULL,
+	PRIMARY KEY (`event_id`) USING BTREE,
+	INDEX `FK_Event_Account` (`account_id`) USING BTREE,
 	INDEX `FK_Event_City` (`city_id`) USING BTREE,
 	INDEX `FK_Event_State` (`state_id`) USING BTREE,
+	INDEX `FK_Event_Club` (`club_id`) USING BTREE,
 	CONSTRAINT `FK_Event_Account` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`account_id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
 	CONSTRAINT `FK_Event_City` FOREIGN KEY (`city_id`) REFERENCES `city` (`city_id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Event_Club` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`club_id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
 	CONSTRAINT `FK_Event_State` FOREIGN KEY (`state_id`) REFERENCES `state` (`state_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )
 COMMENT='Events for a Club.' COLLATE='latin1_general_ci' ENGINE=InnoDB;
 
@@ -287,9 +291,9 @@ INSERT INTO categories (category_id, name) VALUES
 commit;
 
 # insert sample user data, with a password of: abc#123@def456
-INSERT INTO accounts (first_name, last_name, nick_name, state_id, city_id, ACTIVE, hash_pass) VALUES ('John', 'Smith', 'Johnny', 25, 74, 'A', '$2a$10$JnN45cGkOUtcxxKd87MUDuUJ6fM/V2apBUKK7/lQ7X6XT/b7em0qW');
-INSERT INTO userinterest (account_id, category_id) VALUES ((SELECT account_id FROM accounts WHERE nick_name = 'Johnny'), 20);
-INSERT INTO userinterest (account_id, category_id) VALUES ((SELECT account_id FROM accounts WHERE nick_name = 'Johnny'), 20);
+INSERT INTO accounts (first_name, last_name, nick_name, state_id, city_id, ACTIVE, hash_pass) VALUES ('Gary', 'Cooper', 'GaryC', 25, 74, 'A', '$2a$10$JnN45cGkOUtcxxKd87MUDuUJ6fM/V2apBUKK7/lQ7X6XT/b7em0qW');
+INSERT INTO userinterest (account_id, category_id) VALUES ((SELECT account_id FROM accounts WHERE nick_name = 'GaryC'), 20);
+INSERT INTO userinterest (account_id, category_id) VALUES ((SELECT account_id FROM accounts WHERE nick_name = 'GaryC'), 26);
 INSERT INTO accounts (first_name, last_name, nick_name, state_id, city_id, ACTIVE, hash_pass) VALUES
 ('Robert', 'Downey', 'IronBob', 32, 94, 'A', '$2a$10$JnN45cGkOUtcxxKd87MUDuUJ6fM/V2apBUKK7/lQ7X6XT/b7em0qW'),
 ('Scarlett', 'Johansson', 'ScarJo', 45, 133, 'A', '$2a$10$JnN45cGkOUtcxxKd87MUDuUJ6fM/V2apBUKK7/lQ7X6XT/b7em0qW'),

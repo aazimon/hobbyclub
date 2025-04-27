@@ -5,37 +5,116 @@
       {{>layout/heading}}
       <div class="container">
          <div class="row">
-            <div class="col-12 col-md-6"><h1>Upcoming Events</h1></div>
-            <div class="col-12 col-md-6"><h1>Recent Topics</h1></div>
+            <div class="col-12 col-md-6">
+               <h1>Upcoming Events</h1>
+               <div class="row">
+                  <div class="col">
+                     <div style="max-height: 300px; overflow-y: auto;" class="border rounded p-1">
+                        {{#yourClubEvents}}
+                        <div class="row w-100">
+                           <div class="border ms-2 row">
+                              <div class="row"><h2>{{title}}</h2></div>
+                              <div class="row">
+                                 <div class="col">For Club: <a href="/clubHome/{{clubId}}" style="text-decoration: none;">{{clubTitle}}</a></div>
+                              </div>
+                              <div class="row"><p>{{details}}</p></div>
+                              <div class="row"><p>At {{location}} on {{dateTime}}.</p></div>
+                              <div class="row m-1">
+                                 <div class="col-3 small p-0">Members Attending: {{willAttend}}</div>
+                                 <div class="col-3 small p-0">Members May Attend: {{mayAttend}}</div>
+                                 <div class="col-3 small p-0">Members Interested: {{interested}}</div>
+                                 <div class="col-3 small p-0">Members Not-interested: {{none}}</div>
+                              </div>
+                           </div>
+                        </div>
+                        {{/yourClubEvents}}
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="col-12 col-md-6">
+               <h1>Recent Topics</h1>
+               <div class="row">
+                  <div class="col">
+                     <div style="max-height: 300px; overflow-y: auto;" class="border rounded p-1">
+                        {{#yourTopics}}
+                        <div class="row w-100">
+                           <div class="border ms-2">
+                              <div class="row">
+                                 <div class="col-5">{{poster}}</div>
+                                 <div class="col">{{postDate}}</div>
+                              </div>
+                              <div class="row">
+                                 <div class="col"><p>{{message}}</p></div>
+                              </div>
+                           </div>
+                        </div>
+                        {{/yourTopics}}
+                     </div>
+                  </div>
+               </div>
+            </div>
          </div>
          <div class="row">
-            <div class="col-12 col-md-6">Events</div>
             <div class="col-12 col-md-6">
                <div class="row">
-                  Topics
+                  <div class="col mt-3"><h2>Your Events</h2></div>
                </div>
                <div class="row">
-                  <h2>Clubs you joined</h2>
+                  <div class="col">
+                     <div style="max-height: 300px; overflow-y: auto;" class="border rounded p-1">
+                        {{#yourEvents}}
+                        <div class="row w-100">
+                           <div class="border ms-2 row">
+                              <div class="row"><h2>{{title}}</h2></div>
+                              <div class="row">
+                                 <div class="col">For Club: <a href="/clubHome/{{clubId}}" style="text-decoration: none;">{{clubTitle}}</a></div>
+                              </div>
+                              <div class="row"><p>{{details}}</p></div>
+                              <div class="row"><p>At {{location}} on {{dateTime}}.</p></div>
+                              <div class="row m-1">
+                                 <div class="col-3 small p-0">Members Attending: {{willAttend}}</div>
+                                 <div class="col-3 small p-0">Members May Attend: {{mayAttend}}</div>
+                                 <div class="col-3 small p-0">Members Interested: {{interested}}</div>
+                                 <div class="col-3 small p-0">Members Not-interested: {{none}}</div>
+                              </div>
+                           </div>
+                        </div>
+                        {{/yourEvents}}
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="col-12 col-md-6">
+               <div class="row">
+                  <div class="col mt-3"><h2>Clubs you joined</h2></div>
+                  <div style="max-height: 160px; overflow-y: auto;" class="border rounded p-1">
+                     {{#yourJoinedClubs}}
+                     <div class="row w-100 pl-10px">
+                        <div class="border p-2"><a href="/clubHome/{{id}}" style="text-decoration: none;">{{title}}</a></div>
+                     </div>
+                     {{/yourJoinedClubs}}
+                  </div>
                </div>
                <div class="row align-items-center">
-                  <div class="col"><h5>Your Clubs</h5></div>
-                  <div class="col-auto">
-                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newClub">Create New</button>
+                  <div class="col mt-3"><h2>Your Clubs</h2></div>
+                  <div class="col-auto mt-1">
+                     <button type="button" class="btn btn-primary py-1" data-bs-toggle="modal" data-bs-target="#newClub">Create New</button>
                   </div>
                </div>
                <div id="yourClubList" style="max-height: 130px; overflow-y: auto;" class="border rounded p-1">
-                  {{#yourClubs}}
+                  {{#yourCreatedClubs}}
                   <div class="row w-100 pl-10px">
-                     <div class="border p-2"><a href="/clubHome/{{id}}" style="text-decoration: none;">{{name}}</a></div>
+                     <div class="border p-2"><a href="/clubHome/{{id}}" style="text-decoration: none;">{{title}}</a></div>
                   </div>
-                  {{/yourClubs}}
+                  {{/yourCreatedClubs}}
                </div>
             </div>
          </div>
       </div>
 
-      <!-- Pop-up modal -->
-      <div class="modal fade" id="newClub" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+      <!-- New Club Pop-up modal -->
+      <div class="modal fade" id="newClub" tabindex="-1" aria-labelledby="NewClubModal" aria-hidden="true">
          <div class="modal-dialog">
             <div class="modal-content">
                <div class="modal-header">
@@ -47,12 +126,12 @@
                   <div class="modal-body">
                      <div class="row"><span id="invalidTitle"></span></div>
                      <div class="row">
-                        <div class="col"><label for="clubTitle" class="form-label">Title:</label></div>
+                        <div class="col"><label for="newClubTitle" class="form-label">Title:</label></div>
                         <div class="col"><input class="form-control" id="newClubTitle" name="newClubTitle" placeholder="Club Title"></div>
                      </div>
                      <div class="row"><span id="invalidCategory"></span></div>
                      <div class="row">
-                        <div class="col"><label for="clubTitle" class="form-label">Category:</label></div>
+                        <div class="col"><label for="newClubCategory" class="form-label">Category:</label></div>
                         <div class="col">
                            <select class="form-select" id="newClubCategory" name="newClubCategory" aria-label="Select Category">
                               {{#categoryDropDown}}

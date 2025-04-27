@@ -11,6 +11,7 @@ import org.abberkeep.hobbyclub.services.domains.State;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * Title: ClubRepository
@@ -28,6 +29,9 @@ public interface ClubRepository extends JpaRepository<Club, Integer> {
    List<Club> findAllOrderByMemberCount(Pageable pageable);
 
    List<Club> findByAccountAccountId(Integer accountId);
+
+   @Query(value = "SELECT c.* FROM clubs c JOIN userclubs uc ON c.club_id = uc.club_id  WHERE uc.account_id = :id", nativeQuery = true)
+   List<Club> findByJoinedAccountId(@Param("id") Integer accountId);
 
    Optional<Club> findByNameAndState(String name, State state);
 

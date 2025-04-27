@@ -4,14 +4,12 @@
  */
 package org.abberkeep.hobbyclub.services;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import org.abberkeep.hobbyclub.controller.ClubDisplay;
-import org.abberkeep.hobbyclub.controller.SearchForm;
 import org.abberkeep.hobbyclub.controller.SelectOption;
-import org.abberkeep.hobbyclub.controller.YourClub;
+import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
 import org.abberkeep.hobbyclub.services.domains.Account;
 import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.domains.Club;
@@ -21,11 +19,12 @@ import org.abberkeep.hobbyclub.services.domains.UserClub;
 import org.abberkeep.hobbyclub.services.domains.UserClubId;
 import org.abberkeep.hobbyclub.services.repositories.CategoryRepository;
 import org.abberkeep.hobbyclub.services.repositories.ClubRepository;
-import org.abberkeep.hobbyclub.services.repositories.SearchRepository;
 import org.abberkeep.hobbyclub.services.repositories.UserClubRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Title: ClubService
@@ -39,6 +38,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ClubService {
+   private final static Logger log = LoggerFactory.getLogger(ClubService.class);
+   private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
    @Autowired
    private ClubRepository clubRepository;
    @Autowired
@@ -46,7 +47,7 @@ public class ClubService {
    @Autowired
    private UserClubRepository userClubRepository;
    @Autowired
-   private SearchRepository searchRepository;
+   private LocationService locationService;
 
    public List<SelectOption> getCategories(String firstLabel) {
       List<Category> cats = categoryRepository.findAllByOrderByNameAsc();
@@ -68,18 +69,20 @@ public class ClubService {
       return opt.get();
    }
 
-   public List<ClubDisplay> getPopularClubs() {
-      List<Club> clubs = clubRepository.findAllOrderByMemberCount(PageRequest.of(0, 11));
+   public List<ClubDisplay> getYourCreatedClubs(int accountID) {
+      List<Club> clubs = clubRepository.findByAccountAccountId(accountID);
+      List<ClubDisplay> yourClubs = new ArrayList<>();
 
-      return clubs.stream().map(c -> new ClubDisplay(c.getClubId().toString(), c.getName(), c.getDescription())).collect(
-         Collectors.toList());
+      clubs.forEach(cl -> yourClubs.add(new ClubDisplay(cl.getClubId().toString(), cl.getName(), cl.getDescription())));
+
+      return yourClubs;
    }
 
-   public List<YourClub> getYourClubs(int accountID) {
-      List<Club> clubs = clubRepository.findByAccountAccountId(accountID);
-      List<YourClub> yourClubs = new ArrayList<>();
+   public List<ClubDisplay> getYourJoinedClubs(int accountID) {
+      List<Club> clubs = clubRepository.findByJoinedAccountId(accountID);
+      List<ClubDisplay> yourClubs = new ArrayList<>();
 
-      clubs.forEach(cl -> yourClubs.add(new YourClub(cl.getName(), cl.getClubId().toString())));
+      clubs.forEach(cl -> yourClubs.add(new ClubDisplay(cl.getClubId().toString(), cl.getName(), cl.getDescription())));
 
       return yourClubs;
    }
@@ -93,19 +96,7 @@ public class ClubService {
       return true;
    }
 
-   public List<ClubDisplay> searchClubs(SearchForm search) {
-      List<ClubDisplay> cd = new ArrayList<>();
-      String name = search.getClubName();
-      int categoryId = Integer.parseInt(search.getCategoryId());
-      int stateId = Integer.parseInt(search.getStateId());
-      int cityId = Integer.parseInt(search.getCityId());
-
-      List<Club> clubs = searchRepository.searchClubs(name, categoryId, stateId, cityId, PageRequest.of(0, 11));
-
-      clubs.forEach(cl -> cd.add(new ClubDisplay(cl.getClubId().toString(), cl.getName(), cl.getDescription())));
-      return cd;
-   }
-
+   @Transactional
    public boolean joinClub(Account account, int clubId) {
       UserClubId uci = new UserClubId(account.getAccountId(), clubId);
       UserClub uc = new UserClub();
@@ -119,6 +110,7 @@ public class ClubService {
       return true;
    }
 
+   @Transactional
    public Club saveClub(Club club) {
       return clubRepository.save(club);
    }
@@ -132,4 +124,5 @@ public class ClubService {
 
       return false;
    }
+
 }

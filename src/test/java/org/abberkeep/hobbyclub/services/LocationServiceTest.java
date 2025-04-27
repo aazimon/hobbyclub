@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
+import java.util.Optional;
 import org.abberkeep.hobbyclub.controller.SelectOption;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.State;
@@ -54,7 +55,7 @@ public class LocationServiceTest extends TestBaseService {
    }
 
    @Test
-   public void testGetAllCitiesByState() {
+   public void testGetCitiesByStateId() {
       List<City> cities = buildCities(3);
       when(cityRepository.findByState_StateId(12)).thenReturn(cities);
 
@@ -69,6 +70,59 @@ public class LocationServiceTest extends TestBaseService {
       assertEquals(cities.get(1).getName(), actual.get(2).getLabel());
       assertEquals(cities.get(2).getCityId().toString(), actual.get(3).getValue());
       assertEquals(cities.get(2).getName(), actual.get(3).getLabel());
+   }
+
+   @Test
+   public void testGetCityById() {
+      when(cityRepository.findById(3)).thenReturn(Optional.of(buildCity(3, "City3", buildState(1, "1st State"))));
+
+      City actual = underTest.getCityById(3);
+
+      assertEquals(4, actual.getCityId());
+   }
+
+   @Test
+   public void testGetCitiesSelected() {
+      List<City> cities = buildCities(3);
+      when(cityRepository.findByState_StateId(4)).thenReturn(cities);
+
+      List<SelectOption> actual = underTest.getCitiesSelected(4, 2);
+
+      assertEquals(3, actual.size());
+      assertEquals(cities.get(0).getCityId().toString(), actual.get(0).getValue());
+      assertEquals(cities.get(0).getName(), actual.get(0).getLabel());
+      assertFalse(actual.get(0).getSelected());
+      assertEquals(cities.get(1).getCityId().toString(), actual.get(1).getValue());
+      assertEquals(cities.get(1).getName(), actual.get(1).getLabel());
+      assertTrue(actual.get(1).getSelected());
+      assertEquals(cities.get(2).getCityId().toString(), actual.get(2).getValue());
+      assertEquals(cities.get(2).getName(), actual.get(2).getLabel());
+      assertFalse(actual.get(2).getSelected());
+   }
+
+   @Test
+   public void testGetStateById() {
+      when(stateRepository.findById(1)).thenReturn(Optional.of(buildState(1, "1st State")));
+
+      State actual = underTest.getStateById(1);
+
+      assertEquals(2, actual.getStateId());
+   }
+
+   @Test
+   public void testGetStatesSelected() {
+      List<State> states = buildStates(6);
+      when(stateRepository.findAll()).thenReturn(states);
+
+      List<SelectOption> actual = underTest.getStatesSelected(2);
+
+      assertEquals(states.size(), actual.size());
+      assertEquals(states.get(0).getStateId().toString(), actual.get(0).getValue());
+      assertEquals(states.get(0).getName(), actual.get(0).getLabel());
+      assertFalse(actual.get(0).getSelected());
+      assertEquals(states.get(1).getStateId().toString(), actual.get(1).getValue());
+      assertEquals(states.get(1).getName(), actual.get(1).getLabel());
+      assertTrue(actual.get(1).getSelected());
    }
 
 }

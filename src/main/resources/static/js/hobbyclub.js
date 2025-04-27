@@ -23,6 +23,42 @@ function activateStateCity() {
    });
 }
 
+function validateNewEvent() {
+   document.getElementById('invalidTitle').innerHTML = '';
+   document.getElementById('invalidDetails').innerHTML = '';
+   document.getElementById('invalidDate').innerHTML = '';
+   document.getElementById('invalidState').innerHTML = '';
+   document.getElementById('invalidCity').innerHTML = '';
+   var title = document.getElementById('newEventTitle').value.trim();
+   var details = document.getElementById('newEventDetails').value.trim();
+   var dateTime = document.getElementById('newEventDate').value.trim();
+   var state = document.getElementById('stateId').value.trim();
+   var city = document.getElementById('cityId').value.trim();
+   var valid = true;
+
+   if (!title) {
+      document.getElementById('invalidTitle').innerHTML = '<p class="error">A Title is Required</p>';
+      valid = false;
+   }
+   if (!details) {
+      document.getElementById('invalidDetails').innerHTML = '<p class="error">Details are Required</p>';
+      valid = false;
+   }
+   if (!dateTime) {
+      document.getElementById('invalidDate').innerHTML = '<p class="error">Details are Required</p>';
+      valid = false;
+   }
+   if (!state) {
+      document.getElementById('invalidState').innerHTML = '<p class="error">State is Required</p>';
+      valid = false;
+   }
+   if (!city) {
+      document.getElementById('invalidCity').innerHTML = '<p class="error">City is Required</p>';
+      valid = false;
+   }
+   return valid;
+}
+
 function validateNewClub() {
    document.getElementById('invalidTitle').innerHTML = '';
    document.getElementById('invalidCategory').innerHTML = '';

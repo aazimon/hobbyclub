@@ -4,11 +4,15 @@
  */
 package org.abberkeep.hobbyclub.controller;
 
+import org.abberkeep.hobbyclub.controller.dto.SearchForm;
+import org.abberkeep.hobbyclub.controller.dto.ClubRow;
+import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import org.abberkeep.hobbyclub.services.ClubSearchService;
 import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
 import org.abberkeep.hobbyclub.services.domains.Account;
@@ -41,6 +45,8 @@ public class HomeController extends BaseController {
    private LocationService locationService;
    @Autowired
    private ClubService clubService;
+   @Autowired
+   private ClubSearchService clubSearchService;
 
    @RequestMapping("/")
    public ModelAndView indexPage(HttpSession session) {
@@ -88,7 +94,7 @@ public class HomeController extends BaseController {
          mv.getModel().put("cityDropDown", setSelected(locationService.getCitiesByStateId(Integer.valueOf(
             search.getStateId())), search.getCityId()));
       }
-      List<ClubDisplay> searchClubs = clubService.searchClubs(search);
+      List<ClubDisplay> searchClubs = clubSearchService.searchClubs(search);
       populateClubLists(searchClubs, mv);
 
       return mv;
@@ -99,7 +105,7 @@ public class HomeController extends BaseController {
       mv.getModel().put("stateDropDown", locationService.getAllStates());
       mv.getModel().put("cityDropDown", Arrays.asList(new SelectOption("0", "Any City")));
 
-      List<ClubDisplay> popClubs = clubService.getPopularClubs();
+      List<ClubDisplay> popClubs = clubSearchService.getPopularClubs();
       populateClubLists(popClubs, mv);
    }
 

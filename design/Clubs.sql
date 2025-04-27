@@ -850,4 +850,4 @@ INSERT INTO userclubs (account_id, club_id, active) SELECT a.account_id, c.club_
 INSERT INTO userclubs (account_id, club_id, active) SELECT a.account_id, c.club_id, 'A' FROM accounts a, clubs c WHERE a.nick_name = 'PascalP' AND c.name = 'Zumba Party'; 
 INSERT INTO userclubs (account_id, club_id, active) SELECT a.account_id, c.club_id, 'A' FROM accounts a, clubs c WHERE a.nick_name = 'ThorChris' AND c.name = 'Zumba Party'; 
 INSERT INTO userclubs (account_id, club_id, active) SELECT a.account_id, c.club_id, 'A' FROM accounts a, clubs c WHERE a.nick_name = 'JGL' AND c.name = 'Zumba Party'; 
-
+commit;

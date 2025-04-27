@@ -4,12 +4,13 @@
  */
 package org.abberkeep.hobbyclub.services;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Random;
-import org.abberkeep.hobbyclub.controller.RegistrationForm;
+import org.abberkeep.hobbyclub.controller.dto.RegistrationForm;
 import org.abberkeep.hobbyclub.services.domains.Account;
-import org.abberkeep.hobbyclub.services.domains.Status;
 import org.abberkeep.hobbyclub.services.domains.Category;
+import org.abberkeep.hobbyclub.services.domains.Status;
 import org.abberkeep.hobbyclub.services.domains.UserInterest;
 import org.abberkeep.hobbyclub.services.repositories.AccountRepository;
 import org.mindrot.jbcrypt.BCrypt;
@@ -34,6 +35,7 @@ import org.springframework.util.StringUtils;
 public class AccountService {
    private static final Logger log = LoggerFactory.getLogger(AccountService.class);
    private static final String SALT = "$2a$10$JnN45cGkOUtcxxKd87MUDu";
+   private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy 'at' h:mm a");
    @Autowired
    private AccountRepository accountRepository;
    @Autowired
@@ -102,15 +104,15 @@ public class AccountService {
       acc.setCity(locationService.getCityById(Integer.valueOf(regForm.getCityId())));
       acc.setActive(Status.ACTIVE.getState());
       // save user interests
-      if (StringUtils.hasText(regForm.getInterestOne())) {
+      if (StringUtils.hasText(regForm.getInterestOne()) && !"0".equals(regForm.getInterestOne())) {
          Category cat = categoryService.getCategoryById(Integer.valueOf(regForm.getInterestOne()));
          acc.addUserInterest(new UserInterest(acc, cat));
       }
-      if (StringUtils.hasText(regForm.getInterestTwo())) {
+      if (StringUtils.hasText(regForm.getInterestTwo()) && !"0".equals(regForm.getInterestTwo())) {
          Category cat = categoryService.getCategoryById(Integer.valueOf(regForm.getInterestTwo()));
          acc.addUserInterest(new UserInterest(acc, cat));
       }
-      if (StringUtils.hasText(regForm.getInterestThree())) {
+      if (StringUtils.hasText(regForm.getInterestThree()) && !"0".equals(regForm.getInterestThree())) {
          Category cat = categoryService.getCategoryById(Integer.valueOf(regForm.getInterestThree()));
          acc.addUserInterest(new UserInterest(acc, cat));
       }

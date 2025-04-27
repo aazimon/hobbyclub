@@ -10,6 +10,10 @@ import static org.mockito.Mockito.*;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
+import org.abberkeep.hobbyclub.controller.dto.ClubRow;
+import org.abberkeep.hobbyclub.controller.dto.SearchForm;
+import org.abberkeep.hobbyclub.services.ClubSearchService;
 import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.LocationService;
 import org.junit.jupiter.api.Test;
@@ -38,6 +42,8 @@ public class HomeControllerTest extends TestBaseController {
    @Mock
    private ClubService clubService;
    @Mock
+   private ClubSearchService clubSearchService;
+   @Mock
    private LocationService locationService;
    @Mock
    private HttpSession session;
@@ -49,7 +55,7 @@ public class HomeControllerTest extends TestBaseController {
       when(session.getAttribute("userAccount")).thenReturn(buildAccount(10));
       when(locationService.getAllStates()).thenReturn(buildSelectOptions(10));
       when(clubService.getCategories("Any")).thenReturn(buildSelectOptions(4));
-      when(clubService.getPopularClubs()).thenReturn(buildClubDescriptions(6));
+      when(clubSearchService.getPopularClubs()).thenReturn(buildClubDescriptions(6));
 
       ModelAndView actual = underTest.indexPage(session);
 
@@ -76,7 +82,7 @@ public class HomeControllerTest extends TestBaseController {
    public void testIndexPageNoUser() {
       when(locationService.getAllStates()).thenReturn(buildSelectOptions(10));
       when(clubService.getCategories("Any")).thenReturn(buildSelectOptions(4));
-      when(clubService.getPopularClubs()).thenReturn(buildClubDescriptions(1));
+      when(clubSearchService.getPopularClubs()).thenReturn(buildClubDescriptions(1));
 
       ModelAndView actual = underTest.indexPage(session);
 
@@ -97,7 +103,7 @@ public class HomeControllerTest extends TestBaseController {
    public void testLogout() {
       when(locationService.getAllStates()).thenReturn(buildSelectOptions(10));
       when(clubService.getCategories("Any")).thenReturn(buildSelectOptions(4));
-      when(clubService.getPopularClubs()).thenReturn(buildClubDescriptions(1));
+      when(clubSearchService.getPopularClubs()).thenReturn(buildClubDescriptions(1));
 
       ModelAndView actual = underTest.logout(session);
 
@@ -111,7 +117,7 @@ public class HomeControllerTest extends TestBaseController {
       when(locationService.getAllStates()).thenReturn(buildSelectOptions(10));
       when(clubService.getCategories("Any")).thenReturn(buildSelectOptions(8));
       SearchForm search = new SearchForm("", "0", "0", "0");
-      when(clubService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
+      when(clubSearchService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
 
       ModelAndView actual = underTest.searchClubs(search, session);
 
@@ -133,7 +139,7 @@ public class HomeControllerTest extends TestBaseController {
       when(locationService.getAllStates()).thenReturn(buildSelectOptions(10));
       when(clubService.getCategories("Any")).thenReturn(buildSelectOptions(8));
       SearchForm search = new SearchForm("Title", "0", "0", "0");
-      when(clubService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
+      when(clubSearchService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
 
       ModelAndView actual = underTest.searchClubs(search, session);
 
@@ -155,7 +161,7 @@ public class HomeControllerTest extends TestBaseController {
       when(locationService.getAllStates()).thenReturn(buildSelectOptions(10));
       when(clubService.getCategories("Any")).thenReturn(buildSelectOptions(8));
       SearchForm search = new SearchForm("", "4", "0", "0");
-      when(clubService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
+      when(clubSearchService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
 
       ModelAndView actual = underTest.searchClubs(search, session);
 
@@ -179,7 +185,7 @@ public class HomeControllerTest extends TestBaseController {
       when(locationService.getCitiesByStateId(6)).thenReturn(buildSelectOptions(3));
       when(clubService.getCategories("Any")).thenReturn(buildSelectOptions(8));
       SearchForm search = new SearchForm("", "0", "6", "0");
-      when(clubService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
+      when(clubSearchService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
 
       ModelAndView actual = underTest.searchClubs(search, session);
 
@@ -203,7 +209,7 @@ public class HomeControllerTest extends TestBaseController {
       when(locationService.getCitiesByStateId(6)).thenReturn(buildSelectOptions(3));
       when(clubService.getCategories("Any")).thenReturn(buildSelectOptions(8));
       SearchForm search = new SearchForm("", "0", "6", "2");
-      when(clubService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
+      when(clubSearchService.searchClubs(search)).thenReturn(buildClubDescriptions(1));
 
       ModelAndView actual = underTest.searchClubs(search, session);
 
@@ -226,7 +232,7 @@ public class HomeControllerTest extends TestBaseController {
       List<ClubDisplay> cd = new ArrayList<>();
 
       for (int i = 0; i < number; i++) {
-         cd.add(buildClubDescription(Integer.toString(i), "Title" + i));
+         cd.add(buildClubDisplay(Integer.toString(i), "Title" + i));
       }
       return cd;
    }

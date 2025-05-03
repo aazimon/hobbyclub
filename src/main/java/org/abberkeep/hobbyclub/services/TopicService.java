@@ -70,8 +70,13 @@ public class TopicService {
    }
 
    @Transactional
-   public List<TopicDisplay> getTopicsForUser(Integer accountId) {
-      List<Topic> topics = topicRepository.findByAccountAccountId(accountId);
+   public List<TopicDisplay> getTopicsForUser(Integer accountId, Integer clubId) {
+      List<Topic> topics;
+      if (clubId > 0) {
+         topics = topicRepository.findByAccountAccountIdAndClubClubId(accountId, clubId);
+      } else {
+         topics = topicRepository.findByAccountAccountId(accountId);
+      }
       List<TopicDisplay> tds = new ArrayList<>();
 
       topics.forEach(top -> tds.add(mapToTopicDisplay(top)));

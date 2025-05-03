@@ -8,10 +8,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.abberkeep.hobbyclub.controller.SelectOption;
 import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
+import org.abberkeep.hobbyclub.controller.dto.SelectOption;
 import org.abberkeep.hobbyclub.services.domains.Account;
 import org.abberkeep.hobbyclub.services.domains.Category;
+import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.Club;
 import org.abberkeep.hobbyclub.services.domains.State;
 import org.abberkeep.hobbyclub.services.domains.Status;
@@ -111,8 +112,26 @@ public class ClubService {
    }
 
    @Transactional
-   public Club saveClub(Club club) {
-      return clubRepository.save(club);
+   public Club saveClub(Club club, Account account) {
+      State state = account.getState();
+      City city = account.getCity();
+
+      club.setCity(city);
+      club.setState(state);
+      club.setAccount(account);
+      club.setActive(Status.ACTIVE.getState());
+
+      club = clubRepository.save(club);
+      UserClubId uci = new UserClubId(account.getAccountId(), club.getClubId());
+      UserClub uc = new UserClub();
+      uc.setId(uci);
+      uc.setAccount(account);
+      uc.setClub(club);
+      uc.setActive(Status.ACTIVE.getState());
+
+      userClubRepository.save(uc);
+
+      return club;
    }
 
    public boolean validateClubByTitleState(String title, State state) {

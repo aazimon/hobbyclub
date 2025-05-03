@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.abberkeep.hobbyclub.controller.SelectOption;
 import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
+import org.abberkeep.hobbyclub.controller.dto.SelectOption;
+import org.abberkeep.hobbyclub.services.domains.Account;
 import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.domains.Club;
 import org.abberkeep.hobbyclub.services.domains.State;
@@ -140,6 +141,7 @@ public class ClubServiceTest extends TestBaseService {
 
    @Test
    public void testSaveClub() {
+      Account account = buildAccount(10);
       Club club = buildClub(0, "Title12");
       when(clubRepository.save(club)).thenAnswer(invocation -> {
          Club c = (Club) invocation.getArgument(0);
@@ -148,7 +150,7 @@ public class ClubServiceTest extends TestBaseService {
          return c;
       });
 
-      Club actual = underTest.saveClub(club);
+      Club actual = underTest.saveClub(club, account);
 
       assertEquals(45, actual.getClubId());
       assertEquals("Title12", actual.getName());

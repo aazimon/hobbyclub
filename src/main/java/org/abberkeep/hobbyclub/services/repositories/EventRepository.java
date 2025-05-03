@@ -25,10 +25,15 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
    @Query(value = "SELECT e.* FROM events e WHERE e.account_id = :id and e.datetime > CURDATE()", nativeQuery = true)
    List<Event> findByAccountAccountId(@Param("id") Integer accountId);
 
+   @Query(value = "SELECT e.* FROM events e WHERE e.account_id = :id and e.club_id = :clubId and e.datetime > CURDATE()", nativeQuery = true)
+   List<Event> findByAccountAccountIdClubId(@Param("id") Integer accountId, @Param("clubId") Integer clubId);
+
    @Query(value = "SELECT e.* FROM events e WHERE e.club_id = :id and e.datetime > CURDATE()", nativeQuery = true)
    List<Event> findByClubClubId(@Param("id") Integer clubId);
 
    @Query(value = "SELECT e.* FROM events e JOIN userclubs uc ON uc.club_id = e.club_id WHERE uc.account_id = :id and e.datetime > CURDATE()", nativeQuery = true)
    List<Event> findByClubAccountId(@Param("id") Integer accountId);
 
+   @Query(value = "SELECT e.* FROM events e JOIN userclubs uc ON uc.club_id = e.club_id WHERE uc.account_id = :id and e.club_id = :clubId and e.datetime > CURDATE()", nativeQuery = true)
+   List<Event> findByClubAccountIdClubId(@Param("id") Integer accountId, @Param("clubId") Integer clubId);
 }

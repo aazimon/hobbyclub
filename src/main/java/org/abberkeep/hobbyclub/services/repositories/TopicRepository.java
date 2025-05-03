@@ -22,6 +22,8 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
    List<Topic> findByAccountAccountId(Integer accountId);
 
+   List<Topic> findByAccountAccountIdAndClubClubId(Integer accountId, Integer clubId);
+
    List<Topic> findByClubClubId(Integer clubId);
 
 }

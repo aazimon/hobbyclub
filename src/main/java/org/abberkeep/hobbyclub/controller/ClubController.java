@@ -16,11 +16,9 @@ import org.abberkeep.hobbyclub.services.LocationService;
 import org.abberkeep.hobbyclub.services.TopicService;
 import org.abberkeep.hobbyclub.services.domains.Account;
 import org.abberkeep.hobbyclub.services.domains.Category;
-import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.Club;
 import org.abberkeep.hobbyclub.services.domains.EventAttendance;
 import org.abberkeep.hobbyclub.services.domains.State;
-import org.abberkeep.hobbyclub.services.domains.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +63,13 @@ public class ClubController extends BaseController {
       log.debug("Add new Event");
       Club club = clubService.getClub(Integer.parseInt(clubId));
       Account account = (Account) session.getAttribute("userAccount");
+
+      if (event.getNewEventTitle().length() > 50) {
+         event.setNewEventTitle(event.getNewEventTitle().substring(0, 50));
+      }
+      if (event.getNewEventDetails().length() > 500) {
+         event.setNewEventDetails(event.getNewEventDetails().substring(0, 500));
+      }
 
       eventService.saveEvent(event, account, club);
       ModelAndView mv = setUpClubPage(account, club);
@@ -141,6 +146,10 @@ public class ClubController extends BaseController {
       Account account = (Account) session.getAttribute("userAccount");
       Club club = clubService.getClub(Integer.parseInt(topicForm.getClubId()));
 
+      if (topicForm.getPost().length() > 300) {
+         topicForm.setPost(topicForm.getPost().substring(0, 300));
+      }
+
       topicService.addReplyToTopic(topicForm, account);
       ModelAndView mv = setUpClubPage(account, club);
 
@@ -153,6 +162,10 @@ public class ClubController extends BaseController {
    public ModelAndView postTopic(@ModelAttribute TopicForm topicForm, HttpSession session) {
       Account account = (Account) session.getAttribute("userAccount");
       Club club = clubService.getClub(Integer.parseInt(topicForm.getClubId()));
+
+      if (topicForm.getPost().length() > 300) {
+         topicForm.setPost(topicForm.getPost().substring(0, 300));
+      }
 
       topicService.saveTopic(topicForm, account);
       ModelAndView mv = setUpClubPage(account, club);
@@ -167,21 +180,15 @@ public class ClubController extends BaseController {
    public ClubDisplay saveClub(@RequestBody ClubForm clubform, HttpSession session) {
       log.debug("save club");
       Account account = (Account) session.getAttribute("userAccount");
-      State state = account.getState();
-      City city = account.getCity();
       Category category = categoryService.getCategoryById(Integer.valueOf(clubform.getCategory()));
 
       Club club = new Club();
 
       club.setName(clubform.getTitle());
       club.setDescription(clubform.getDescription());
-      club.setCity(city);
-      club.setState(state);
       club.setCategory(category);
-      club.setAccount(account);
-      club.setActive(Status.ACTIVE.getState());
 
-      club = clubService.saveClub(club);
+      club = clubService.saveClub(club, account);
 
       return new ClubDisplay(club.getClubId().toString(), club.getName(), club.getDescription());
    }

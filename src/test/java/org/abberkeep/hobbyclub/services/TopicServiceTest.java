@@ -80,7 +80,24 @@ public class TopicServiceTest extends TestBaseService {
       tps.add(buildTopic(101, 10, 23, 3));
       when(topicRepository.findByAccountAccountId(10)).thenReturn(tps);
 
-      List<TopicDisplay> actual = underTest.getTopicsForUser(10);
+      List<TopicDisplay> actual = underTest.getTopicsForUser(10, 0);
+
+      assertEquals(2, actual.size());
+      TopicDisplay actualTD = actual.get(0);
+      assertEquals(0, actualTD.getReplies().size());
+      actualTD = actual.get(1);
+      assertEquals(3, actualTD.getReplies().size());
+   }
+
+   @Test
+   public void testGetTopicsForUserFilter() {
+      List<Topic> tps = new ArrayList<>();
+
+      tps.add(buildTopic(100, 10, 23, 0));
+      tps.add(buildTopic(101, 10, 23, 3));
+      when(topicRepository.findByAccountAccountIdAndClubClubId(10, 14)).thenReturn(tps);
+
+      List<TopicDisplay> actual = underTest.getTopicsForUser(10, 14);
 
       assertEquals(2, actual.size());
       TopicDisplay actualTD = actual.get(0);

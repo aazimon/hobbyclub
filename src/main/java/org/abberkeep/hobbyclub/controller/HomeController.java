@@ -4,6 +4,7 @@
  */
 package org.abberkeep.hobbyclub.controller;
 
+import org.abberkeep.hobbyclub.controller.dto.SelectOption;
 import org.abberkeep.hobbyclub.controller.dto.SearchForm;
 import org.abberkeep.hobbyclub.controller.dto.ClubRow;
 import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;

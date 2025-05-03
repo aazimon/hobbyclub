@@ -4,7 +4,7 @@
  */
 package org.abberkeep.hobbyclub.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -58,7 +58,7 @@ public class EventServiceTest extends TestBaseService {
          assertEquals(5, ev.getEventAttendances().size());
 
          for (EventAttendance ea : ev.getEventAttendances()) {
-            if (ea.getAccount().getAccountId().equals(23)) {
+            if (ea.getAccount().getAccountId().equals(10)) {
                assertEquals(EventAttendance.INTERESTED, ea.getAttending());
                assertEquals(account, ea.getAccount());
             }
@@ -68,6 +68,29 @@ public class EventServiceTest extends TestBaseService {
       });
 
       assertEquals("My Event for 1", underTest.addAttendanceToEvent(56, account, EventAttendance.INTERESTED));
+   }
+
+   @Test
+   public void testAddAttendanceToEventChange() {
+      Account account = buildAccount(10);
+      Event event = buildEvent(1, "My Event for 1", buildAccount(23));
+      event.addAttendance(new EventAttendance(account, event, EventAttendance.INTERESTED));
+      when(eventRepository.findById(56)).thenReturn(Optional.of(event));
+      when(eventRepository.save(any())).thenAnswer(invocation -> {
+         Event ev = invocation.getArgument(0);
+
+         assertEquals(5, ev.getEventAttendances().size());
+
+         for (EventAttendance ea : ev.getEventAttendances()) {
+            if (ea.getAccount().getAccountId().equals(10)) {
+               assertEquals(EventAttendance.MAY_ATTEND, ea.getAttending());
+            }
+         }
+
+         return ev;
+      });
+
+      assertEquals("My Event for 1", underTest.addAttendanceToEvent(56, account, EventAttendance.MAY_ATTEND));
    }
 
    @Test
@@ -82,8 +105,107 @@ public class EventServiceTest extends TestBaseService {
 
    @Test
    public void testGetClubEvents() {
+      when(eventRepository.findByClubClubId(21)).thenReturn(buildEvents(2));
 
-      List<EventDisplay> actual = underTest.getClubEvents(23, 10);
+      List<EventDisplay> actual = underTest.getClubEvents(21, 11);
+
+      assertEquals(2, actual.size());
+      EventDisplay actualEvnt = actual.get(0);
+      assertEquals("21", actualEvnt.getClubId());
+      assertEquals("Club1", actualEvnt.getClubTitle());
+      assertEquals("Event0", actualEvnt.getTitle());
+      assertEquals("This is the details", actualEvnt.getDetails());
+      assertEquals("City 31, State1", actualEvnt.getLocation());
+      assertEquals("Nick", actualEvnt.getOrganizer());
+      assertEquals("1", actualEvnt.getWillAttend());
+      assertEquals("1", actualEvnt.getMayAttend());
+      assertEquals("1", actualEvnt.getInterested());
+      assertEquals("1", actualEvnt.getNone());
+      assertEquals("true", actualEvnt.getOwnEvent());
+   }
+
+   @Test
+   public void testGetClubEventsAttending() {
+      List<Event> events = buildEvents(1);
+      EventAttendance attendance = new EventAttendance();
+      attendance.setAccount(buildAccount(18));
+      attendance.setEvent(events.get(0));
+      attendance.setAttending(EventAttendance.WILL_ATTEND);
+      events.get(0).addAttendance(attendance);
+
+      when(eventRepository.findByClubClubId(23)).thenReturn(events);
+
+      List<EventDisplay> actual = underTest.getClubEvents(23, 18);
+
+      assertEquals(1, actual.size());
+      EventDisplay actualEvnt = actual.get(0);
+      assertEquals("21", actualEvnt.getClubId());
+      assertNull(actualEvnt.getOwnEvent());
+      assertEquals("2", actualEvnt.getWillAttend());
+      assertEquals("true", actualEvnt.getUserAttend());
+   }
+
+   @Test
+   public void testGetClubEventsMayAttend() {
+      List<Event> events = buildEvents(1);
+      EventAttendance attendance = new EventAttendance();
+      attendance.setAccount(buildAccount(18));
+      attendance.setEvent(events.get(0));
+      attendance.setAttending(EventAttendance.MAY_ATTEND);
+      events.get(0).addAttendance(attendance);
+
+      when(eventRepository.findByClubClubId(23)).thenReturn(events);
+
+      List<EventDisplay> actual = underTest.getClubEvents(23, 18);
+
+      assertEquals(1, actual.size());
+      EventDisplay actualEvnt = actual.get(0);
+      assertEquals("21", actualEvnt.getClubId());
+      assertNull(actualEvnt.getOwnEvent());
+      assertEquals("2", actualEvnt.getMayAttend());
+      assertEquals("true", actualEvnt.getUserMay());
+   }
+
+   @Test
+   public void testGetClubEventsInterested() {
+      List<Event> events = buildEvents(1);
+      EventAttendance attendance = new EventAttendance();
+      attendance.setAccount(buildAccount(18));
+      attendance.setEvent(events.get(0));
+      attendance.setAttending(EventAttendance.INTERESTED);
+      events.get(0).addAttendance(attendance);
+
+      when(eventRepository.findByClubClubId(23)).thenReturn(events);
+
+      List<EventDisplay> actual = underTest.getClubEvents(23, 18);
+
+      assertEquals(1, actual.size());
+      EventDisplay actualEvnt = actual.get(0);
+      assertEquals("21", actualEvnt.getClubId());
+      assertNull(actualEvnt.getOwnEvent());
+      assertEquals("2", actualEvnt.getInterested());
+      assertEquals("true", actualEvnt.getUserInterest());
+   }
+
+   @Test
+   public void testGetClubEventsNone() {
+      List<Event> events = buildEvents(1);
+      EventAttendance attendance = new EventAttendance();
+      attendance.setAccount(buildAccount(18));
+      attendance.setEvent(events.get(0));
+      attendance.setAttending(EventAttendance.NOT_INTERESTED);
+      events.get(0).addAttendance(attendance);
+
+      when(eventRepository.findByClubClubId(23)).thenReturn(events);
+
+      List<EventDisplay> actual = underTest.getClubEvents(23, 18);
+
+      assertEquals(1, actual.size());
+      EventDisplay actualEvnt = actual.get(0);
+      assertEquals("21", actualEvnt.getClubId());
+      assertNull(actualEvnt.getOwnEvent());
+      assertEquals("2", actualEvnt.getNone());
+      assertEquals("true", actualEvnt.getUserNone());
    }
 
    @Test
@@ -91,7 +213,17 @@ public class EventServiceTest extends TestBaseService {
       Account account = buildAccount(10);
       when(eventRepository.findByAccountAccountId(10)).thenReturn(buildEvents(4));
 
-      List<EventDisplay> actual = underTest.getEventsForUsers(account);
+      List<EventDisplay> actual = underTest.getEventsForUsers(account, 0);
+
+      assertEquals(4, actual.size());
+   }
+
+   @Test
+   public void testGetEventsForUsersFilter() {
+      Account account = buildAccount(10);
+      when(eventRepository.findByAccountAccountIdClubId(10, 12)).thenReturn(buildEvents(4));
+
+      List<EventDisplay> actual = underTest.getEventsForUsers(account, 12);
 
       assertEquals(4, actual.size());
    }

@@ -4,6 +4,8 @@
  */
 package org.abberkeep.hobbyclub.controller;
 
+import org.abberkeep.hobbyclub.controller.dto.SelectOption;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

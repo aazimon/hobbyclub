@@ -45,10 +45,38 @@ $(function () {
                               <div class="col-3 small p-0">Not Interested: {{none}}</div>
                               {{/ownEvent}}
                               {{^ownEvent}}
-                              <div class="col-3 p-0"><a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/WA" role="button">Will Attend: {{willAttend}}</a></div>
-                              <div class="col-3 p-0"><a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/MA" role="button">May Attend: {{mayAttend}}</a></div>
-                              <div class="col-3 p-0"><a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/IE" role="button">Interested: {{interested}}</a></div>
-                              <div class="col-3 p-0"><a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/NI" role="button">Not Interested: {{none}}</a></div>
+                              <div class="col-3 p-0">
+                                 {{#userAttend}}
+                                 <a class="btn btn-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/WA" role="button">Will Attend: {{willAttend}}</a>
+                                 {{/userAttend}}
+                                 {{^userAttend}}
+                                 <a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/WA" role="button">Will Attend: {{willAttend}}</a>
+                                 {{/userAttend}}
+                              </div>
+                              <div class="col-3 p-0">
+                                 {{#userMay}}
+                                 <a class="btn btn-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/MA" role="button">May Attend: {{mayAttend}}</a>
+                                 {{/userMay}}
+                                 {{^userMay}}
+                                 <a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/MA" role="button">May Attend: {{mayAttend}}</a>
+                                 {{/userMay}}
+                              </div>
+                              <div class="col-3 p-0">
+                                 {{#userInterest}}
+                                 <a class="btn btn-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/IE" role="button">Interested: {{interested}}</a>
+                                 {{/userInterest}}
+                                 {{^userInterest}}
+                                 <a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/IE" role="button">Interested: {{interested}}</a>
+                                 {{/userInterest}}
+                              </div>
+                              <div class="col-3 p-0">
+                                 {{#userNone}}
+                                 <a class="btn btn-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/NI" role="button">Not Interested: {{none}}</a>
+                                 {{/userNone}}
+                                 {{^userNone}}
+                                 <a class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;" href="/markAttendance/{{clubId}}/{{id}}/NI" role="button">Not Interested: {{none}}</a>
+                                 {{/userNone}}
+                              </div>
                               {{/ownEvent}}
                               {{/userClub}}
                               {{^userClub}}
@@ -82,7 +110,7 @@ $(function () {
                   <form action="/postTopic" method="post">
                      <div class="row">
                         <div class="col-8">
-                           <input class="form-control" id="post" name="post">
+                           <input class="form-control" id="post" name="post" maxlength="300">
                            <input type="hidden" id="clubId" name="clubId" value="{{clubId}}">
                         </div>
                         <div class="col-2"><button id="postTopic" type="submit" class="btn btn-primary">Post</button></div>
@@ -106,7 +134,7 @@ $(function () {
                            <form action="/postReply" method="post">
                               <div class="row">
                                  <div class="col-8">
-                                    <input class="form-control" id="post" name="post">
+                                    <input class="form-control" id="post" name="post" maxlength="300">
                                     <input type="hidden" id="clubId" name="clubId" value="{{clubId}}">
                                     <input type="hidden" id="topicId" name="topicId" value="{{topicId}}">
                                  </div>
@@ -147,13 +175,13 @@ $(function () {
                      <div class="row"><div class="col"><span id="invalidTitle"></span></div></div>
                      <div class="row">
                         <div class="col-2"><label for="newEventTitle" class="form-label">Title:</label></div>
-                        <div class="col"><input class="form-control" id="newEventTitle" name="newEventTitle" placeholder="Event Title"></div>
+                        <div class="col"><input class="form-control" id="newEventTitle" name="newEventTitle" placeholder="Event Title" maxlength="50"></div>
                      </div>
                      <div class="row"><div class="col"><span id="invalidDetails"></span></div></div>
                      <div class="row">
                         <div class="col-2"><label for="newEventDetails" class="form-label">Details:</label></div>
                         <div class="col">
-                           <textarea class="form-control" id="newEventDetails" name="newEventDetails" rows="4"></textarea>
+                           <textarea class="form-control" id="newEventDetails" name="newEventDetails" rows="4" maxlength="500"></textarea>
                         </div>
                      </div>
                      <div class="row"><div class="col"><span id="invalidDate"></span></div></div>

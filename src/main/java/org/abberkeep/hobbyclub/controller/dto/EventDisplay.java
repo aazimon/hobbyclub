@@ -28,6 +28,10 @@ public class EventDisplay {
    private String clubId;
    private String clubTitle;
    private String ownEvent;
+   private String userAttend;
+   private String userMay;
+   private String userInterest;
+   private String userNone;
 
    public EventDisplay() {
    }
@@ -100,6 +104,22 @@ public class EventDisplay {
       return ownEvent;
    }
 
+   public String getUserAttend() {
+      return userAttend;
+   }
+
+   public String getUserMay() {
+      return userMay;
+   }
+
+   public String getUserInterest() {
+      return userInterest;
+   }
+
+   public String getUserNone() {
+      return userNone;
+   }
+
    public void setId(String id) {
       this.id = id;
    }
@@ -150,6 +170,22 @@ public class EventDisplay {
 
    public void setOwnEvent(String ownEvent) {
       this.ownEvent = ownEvent;
+   }
+
+   public void setUserAttend(String userAttend) {
+      this.userAttend = userAttend;
+   }
+
+   public void setUserMay(String userMay) {
+      this.userMay = userMay;
+   }
+
+   public void setUserInterest(String userInterest) {
+      this.userInterest = userInterest;
+   }
+
+   public void setUserNone(String userNone) {
+      this.userNone = userNone;
    }
 
 }

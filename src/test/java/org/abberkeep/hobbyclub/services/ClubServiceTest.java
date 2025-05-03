@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.abberkeep.hobbyclub.controller.ClubDisplay;
-import org.abberkeep.hobbyclub.controller.SearchForm;
 import org.abberkeep.hobbyclub.controller.SelectOption;
-import org.abberkeep.hobbyclub.controller.YourClub;
+import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
 import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.domains.Club;
 import org.abberkeep.hobbyclub.services.domains.State;
@@ -22,15 +20,12 @@ import org.abberkeep.hobbyclub.services.domains.Status;
 import org.abberkeep.hobbyclub.services.domains.UserClub;
 import org.abberkeep.hobbyclub.services.repositories.CategoryRepository;
 import org.abberkeep.hobbyclub.services.repositories.ClubRepository;
-import org.abberkeep.hobbyclub.services.repositories.SearchRepository;
 import org.abberkeep.hobbyclub.services.repositories.UserClubRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
 
 /**
  *
@@ -45,13 +40,9 @@ public class ClubServiceTest extends TestBaseService {
    @Mock
    private UserClubRepository userClubRepository;
    @Mock
-   private SearchRepository searchRepository;
+   private LocationService locationService;
    @InjectMocks
    private ClubService underTest;
-
-   @BeforeEach
-   public void setUp() {
-   }
 
    @Test
    public void testGetCategories() {
@@ -90,31 +81,27 @@ public class ClubServiceTest extends TestBaseService {
    }
 
    @Test
-   public void testGetPopularClubs() {
-      when(clubRepository.findAllOrderByMemberCount(PageRequest.of(0, 11))).thenReturn(buildClubs(3));
-
-      List<ClubDisplay> actual = underTest.getPopularClubs();
-
-      assertEquals(3, actual.size());
-   }
-
-   @Test
-   public void testGetPopularClubsLimit() {
-      when(clubRepository.findAllOrderByMemberCount(PageRequest.of(0, 11))).thenReturn(buildClubs(11));
-
-      List<ClubDisplay> actual = underTest.getPopularClubs();
-
-      assertEquals(11, actual.size());
-   }
-
-   @Test
-   public void testGetYourClubs() {
+   public void testGetYourCreatedClubs() {
       List<Club> clubs = new ArrayList<>();
       clubs.add(buildClub(12, "Title12"));
       clubs.add(buildClub(23, "Title23"));
       when(clubRepository.findByAccountAccountId(12)).thenReturn(clubs);
 
-      List<YourClub> actual = underTest.getYourClubs(12);
+      List<ClubDisplay> actual = underTest.getYourCreatedClubs(12);
+
+      assertEquals(2, actual.size());
+      assertEquals("12", actual.get(0).getId());
+      assertEquals("23", actual.get(1).getId());
+   }
+
+   @Test
+   public void testGetYourJoinedClubs() {
+      List<Club> clubs = new ArrayList<>();
+      clubs.add(buildClub(12, "Title12"));
+      clubs.add(buildClub(23, "Title23"));
+      when(clubRepository.findByJoinedAccountId(12)).thenReturn(clubs);
+
+      List<ClubDisplay> actual = underTest.getYourJoinedClubs(12);
 
       assertEquals(2, actual.size());
       assertEquals("12", actual.get(0).getId());
@@ -165,26 +152,6 @@ public class ClubServiceTest extends TestBaseService {
 
       assertEquals(45, actual.getClubId());
       assertEquals("Title12", actual.getName());
-   }
-
-   @Test
-   public void testSearchClubsNoSelection() {
-      when(searchRepository.searchClubs("", 0, 0, 0, PageRequest.of(0, 11))).thenReturn(buildClubs(3));
-      SearchForm search = new SearchForm("", "0", "0", "0");
-
-      List<ClubDisplay> actual = underTest.searchClubs(search);
-
-      assertEquals(3, actual.size());
-   }
-
-   @Test
-   public void testSearchClubs() {
-      when(searchRepository.searchClubs("Title", 1, 3, 0, PageRequest.of(0, 11))).thenReturn(buildClubs(3));
-      SearchForm search = new SearchForm("Title", "1", "3", "0");
-
-      List<ClubDisplay> actual = underTest.searchClubs(search);
-
-      assertEquals(3, actual.size());
    }
 
    @Test

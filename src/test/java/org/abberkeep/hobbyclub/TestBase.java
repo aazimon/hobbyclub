@@ -4,12 +4,19 @@
  */
 package org.abberkeep.hobbyclub;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 import org.abberkeep.hobbyclub.services.domains.Account;
-import org.abberkeep.hobbyclub.services.domains.Status;
 import org.abberkeep.hobbyclub.services.domains.Category;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.Club;
+import org.abberkeep.hobbyclub.services.domains.Event;
+import org.abberkeep.hobbyclub.services.domains.EventAttendance;
 import org.abberkeep.hobbyclub.services.domains.State;
+import org.abberkeep.hobbyclub.services.domains.Status;
 
 /**
  * Title: BaseTest
@@ -22,6 +29,7 @@ import org.abberkeep.hobbyclub.services.domains.State;
  * @version
  */
 public class TestBase {
+   protected DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
    protected Account buildAccount(int id) {
       Account acc = new Account();
@@ -53,6 +61,29 @@ public class TestBase {
       club.setActive(Status.ACTIVE.getState());
 
       return club;
+   }
+
+   protected Event buildEvent(int id, String title, Account account) {
+      Event ev = new Event();
+
+      ev.setEventId(id);
+      ev.setTitle(title);
+      ev.setDetails("This is the details");
+      ev.setDatetime(LocalDateTime.of(2025, Month.APRIL, 3, 19, 5));
+      ev.setAccount(account);
+      ev.setClub(buildClub(id + 20, "Club" + id));
+      ev.setState(buildState(id + 12, "State" + id));
+      ev.setCity(buildCity(id + 30, "City 3" + id, ev.getState()));
+      Set<EventAttendance> ea = new HashSet<>();
+
+      ea.add(new EventAttendance(buildAccount(40 + id), ev, EventAttendance.WILL_ATTEND));
+      ea.add(new EventAttendance(buildAccount(45 + id), ev, EventAttendance.MAY_ATTEND));
+      ea.add(new EventAttendance(buildAccount(50 + id), ev, EventAttendance.INTERESTED));
+      ea.add(new EventAttendance(buildAccount(55 + id), ev, EventAttendance.NOT_INTERESTED));
+
+      ev.setEventAttendances(ea);
+
+      return ev;
    }
 
    protected State buildState(int id, String state) {

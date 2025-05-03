@@ -65,6 +65,21 @@ public class LocationService {
       return display;
    }
 
+   public List<SelectOption> getCitiesSelected(int stateId, int cityId) {
+      List<City> cities = cityRepository.findByState_StateId(stateId);
+      List<SelectOption> display = new ArrayList<>();
+
+      cities.forEach(city -> {
+         SelectOption so = new SelectOption(city.getCityId().toString(), city.getName());
+         if (city.getCityId() == cityId) {
+            so.setSelected(true);
+         }
+         display.add(so);
+      });
+
+      return display;
+   }
+
    public State getStateById(Integer stateId) {
       Optional<State> opt = stateRepository.findById(stateId);
 
@@ -73,6 +88,21 @@ public class LocationService {
       }
 
       return opt.get();
+   }
+
+   public List<SelectOption> getStatesSelected(int stateId) {
+      List<State> states = stateRepository.findAll();
+      List<SelectOption> display = new ArrayList<>();
+
+      states.forEach(state -> {
+         SelectOption so = new SelectOption(state.getStateId().toString(), state.getName());
+         if (state.getStateId() == stateId) {
+            so.setSelected(true);
+         }
+         display.add(so);
+      });
+
+      return display;
    }
 
 }

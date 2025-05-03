@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Optional;
-import org.abberkeep.hobbyclub.controller.RegistrationForm;
+import org.abberkeep.hobbyclub.controller.dto.RegistrationForm;
 import org.abberkeep.hobbyclub.services.domains.Account;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.State;
@@ -70,6 +70,7 @@ public class AccountServiceTest extends TestBaseService {
       assertEquals(cityExpected, actual.getCity());
       assertEquals('A', actual.getActive());
       assertNotNull(actual.getCreateDatetime());
+      verify(categoryService, never()).getCategoryById(any());
    }
 
    @Test
@@ -96,6 +97,7 @@ public class AccountServiceTest extends TestBaseService {
       assertEquals(cityExpected, actual.getCity());
       assertEquals('A', actual.getActive());
       assertNotNull(actual.getCreateDatetime());
+      verify(categoryService, never()).getCategoryById(any());
    }
 
    @Test
@@ -180,6 +182,11 @@ public class AccountServiceTest extends TestBaseService {
       assertNull(actual);
    }
 
+   @Test
+   public void testGetRandomNickName() {
+      //
+   }
+
    private RegistrationForm buildRegistrationForm(String first, String nick) {
       RegistrationForm form = new RegistrationForm();
 
@@ -189,6 +196,9 @@ public class AccountServiceTest extends TestBaseService {
       form.setPassword("abc#123@def456");
       form.setCityId("23");
       form.setStateId("12");
+      form.setInterestOne("0");
+      form.setInterestTwo("0");
+      form.setInterestThree("0");
 
       return form;
    }

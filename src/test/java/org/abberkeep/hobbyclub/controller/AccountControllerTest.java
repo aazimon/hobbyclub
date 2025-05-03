@@ -10,9 +10,15 @@ import static org.mockito.Mockito.*;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
+import org.abberkeep.hobbyclub.controller.dto.LogInForm;
+import org.abberkeep.hobbyclub.controller.dto.RegistrationForm;
+import org.abberkeep.hobbyclub.controller.dto.TopicDisplay;
 import org.abberkeep.hobbyclub.services.AccountService;
 import org.abberkeep.hobbyclub.services.ClubService;
+import org.abberkeep.hobbyclub.services.EventService;
 import org.abberkeep.hobbyclub.services.LocationService;
+import org.abberkeep.hobbyclub.services.TopicService;
 import org.abberkeep.hobbyclub.services.domains.Account;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,13 +37,17 @@ public class AccountControllerTest extends TestBaseController {
    private static final String PAGE_LOGIN = "login";
    private static final String PAGE_REGISTRATION = "registration";
    private static final String PAGE_USERHOME = "userhome";
-   private static final int USER_PAGE_SIZE = 6;
+   private static final int USER_PAGE_SIZE = 10;
    @Mock
    private ClubService clubService;
    @Mock
    private LocationService locationService;
    @Mock
    private AccountService accountService;
+   @Mock
+   private EventService eventService;
+   @Mock
+   private TopicService topicService;
    @Mock
    private HttpSession session;
    @InjectMocks
@@ -123,13 +133,17 @@ public class AccountControllerTest extends TestBaseController {
       addInterests(regForm, "Books", "Games", "Photography");
       when(accountService.createNewAccount(regForm)).thenReturn(buildAccount(11));
       when(clubService.getCategories("Choose")).thenReturn(buildSelectOptions(4));
-      when(clubService.getYourClubs(11)).thenReturn(new ArrayList<>());
+      when(clubService.getYourCreatedClubs(11)).thenReturn(new ArrayList<>());
+      when(clubService.getYourJoinedClubs(11)).thenReturn(new ArrayList<>());
+      when(topicService.getTopicsForUser(11)).thenReturn(new ArrayList<>());
 
       ModelAndView actual = underTest.registerNewMember(regForm, session);
 
       validateSetUpHomePage(actual);
       verify(session).setAttribute(eq("userAccount"), any(Account.class));
-      List<YourClub> actualYC = (List<YourClub>) actual.getModel().get("yourClubs");
+      List<ClubDisplay> actualYC = (List<ClubDisplay>) actual.getModel().get("yourCreatedClubs");
+      assertEquals(0, actualYC.size());
+      actualYC = (List<ClubDisplay>) actual.getModel().get("yourJoinedClubs");
       assertEquals(0, actualYC.size());
    }
 
@@ -139,13 +153,17 @@ public class AccountControllerTest extends TestBaseController {
       addInterests(regForm, "Interest", null, null);
       when(accountService.createNewAccount(regForm)).thenReturn(buildAccount(11));
       when(clubService.getCategories("Choose")).thenReturn(buildSelectOptions(4));
-      when(clubService.getYourClubs(11)).thenReturn(new ArrayList<>());
+      when(clubService.getYourCreatedClubs(11)).thenReturn(new ArrayList<>());
+      when(clubService.getYourJoinedClubs(11)).thenReturn(new ArrayList<>());
+      when(topicService.getTopicsForUser(11)).thenReturn(new ArrayList<>());
 
       ModelAndView actual = underTest.registerNewMember(regForm, session);
 
       validateSetUpHomePage(actual);
       verify(session).setAttribute(eq("userAccount"), any(Account.class));
-      List<YourClub> actualYC = (List<YourClub>) actual.getModel().get("yourClubs");
+      List<ClubDisplay> actualYC = (List<ClubDisplay>) actual.getModel().get("yourCreatedClubs");
+      assertEquals(0, actualYC.size());
+      actualYC = (List<ClubDisplay>) actual.getModel().get("yourJoinedClubs");
       assertEquals(0, actualYC.size());
    }
 
@@ -155,13 +173,17 @@ public class AccountControllerTest extends TestBaseController {
       addInterests(regForm, null, "Interest", null);
       when(accountService.createNewAccount(regForm)).thenReturn(buildAccount(11));
       when(clubService.getCategories("Choose")).thenReturn(buildSelectOptions(4));
-      when(clubService.getYourClubs(11)).thenReturn(new ArrayList<>());
+      when(clubService.getYourCreatedClubs(11)).thenReturn(new ArrayList<>());
+      when(clubService.getYourJoinedClubs(11)).thenReturn(new ArrayList<>());
+      when(topicService.getTopicsForUser(11)).thenReturn(new ArrayList<>());
 
       ModelAndView actual = underTest.registerNewMember(regForm, session);
 
       validateSetUpHomePage(actual);
       verify(session).setAttribute(eq("userAccount"), any(Account.class));
-      List<YourClub> actualYC = (List<YourClub>) actual.getModel().get("yourClubs");
+      List<ClubDisplay> actualYC = (List<ClubDisplay>) actual.getModel().get("yourCreatedClubs");
+      assertEquals(0, actualYC.size());
+      actualYC = (List<ClubDisplay>) actual.getModel().get("yourJoinedClubs");
       assertEquals(0, actualYC.size());
    }
 
@@ -171,13 +193,17 @@ public class AccountControllerTest extends TestBaseController {
       addInterests(regForm, null, null, "Interest");
       when(accountService.createNewAccount(regForm)).thenReturn(buildAccount(11));
       when(clubService.getCategories("Choose")).thenReturn(buildSelectOptions(4));
-      when(clubService.getYourClubs(11)).thenReturn(new ArrayList<>());
+      when(clubService.getYourCreatedClubs(11)).thenReturn(new ArrayList<>());
+      when(clubService.getYourJoinedClubs(11)).thenReturn(new ArrayList<>());
+      when(topicService.getTopicsForUser(11)).thenReturn(new ArrayList<>());
 
       ModelAndView actual = underTest.registerNewMember(regForm, session);
 
       validateSetUpHomePage(actual);
       verify(session).setAttribute(eq("userAccount"), any(Account.class));
-      List<YourClub> actualYC = (List<YourClub>) actual.getModel().get("yourClubs");
+      List<ClubDisplay> actualYC = (List<ClubDisplay>) actual.getModel().get("yourCreatedClubs");
+      assertEquals(0, actualYC.size());
+      actualYC = (List<ClubDisplay>) actual.getModel().get("yourJoinedClubs");
       assertEquals(0, actualYC.size());
    }
 
@@ -625,22 +651,38 @@ public class AccountControllerTest extends TestBaseController {
    @Test
    public void testUserHomePage() {
       Account account = buildAccount(10);
-      List<YourClub> yourClubs = new ArrayList<>();
-      yourClubs.add(new YourClub("Name1", "12"));
-      yourClubs.add(new YourClub("Name2", "23"));
+      List<ClubDisplay> createdClubs = new ArrayList<>();
+      createdClubs.add(buildClubDisplay("12", "Name1"));
+      createdClubs.add(buildClubDisplay("23", "Name2"));
+      List<ClubDisplay> joinedClubs = new ArrayList<>();
+      joinedClubs.add(buildClubDisplay("11", "Name11"));
+      joinedClubs.add(buildClubDisplay("12", "Name12"));
+      joinedClubs.add(buildClubDisplay("13", "Name13"));
+      List<TopicDisplay> yourTopics = new ArrayList<>();
+      yourTopics.add(buildTopicDisplay("100"));
       when(session.getAttribute("userAccount")).thenReturn(account);
       when(clubService.getCategories("Choose")).thenReturn(buildSelectOptions(4));
-      when(clubService.getYourClubs(10)).thenReturn(yourClubs);
+      when(clubService.getYourCreatedClubs(10)).thenReturn(createdClubs);
+      when(clubService.getYourJoinedClubs(10)).thenReturn(joinedClubs);
+      when(topicService.getTopicsForUser(10)).thenReturn(yourTopics);
 
       ModelAndView actual = underTest.userHomePage(session);
 
       validateSetUpHomePage(actual);
-      List<YourClub> actualYC = (List<YourClub>) actual.getModel().get("yourClubs");
+      List<ClubDisplay> actualYC = (List<ClubDisplay>) actual.getModel().get("yourCreatedClubs");
       assertEquals(2, actualYC.size());
       assertEquals("12", actualYC.get(0).getId());
-      assertEquals("Name1", actualYC.get(0).getName());
+      assertEquals("Name1", actualYC.get(0).getTitle());
       assertEquals("23", actualYC.get(1).getId());
-      assertEquals("Name2", actualYC.get(1).getName());
+      assertEquals("Name2", actualYC.get(1).getTitle());
+      actualYC = (List<ClubDisplay>) actual.getModel().get("yourJoinedClubs");
+      assertEquals(3, actualYC.size());
+      assertEquals("11", actualYC.get(0).getId());
+      assertEquals("Name11", actualYC.get(0).getTitle());
+      assertEquals("12", actualYC.get(1).getId());
+      assertEquals("Name12", actualYC.get(1).getTitle());
+      assertEquals("13", actualYC.get(2).getId());
+      assertEquals("Name13", actualYC.get(2).getTitle());
    }
 
    private void addInterests(RegistrationForm regForm, String ints1, String ints2, String ints3) {

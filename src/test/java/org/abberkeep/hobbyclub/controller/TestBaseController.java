@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.abberkeep.hobbyclub.TestBase;
+import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
+import org.abberkeep.hobbyclub.controller.dto.TopicDisplay;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -23,7 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public abstract class TestBaseController extends TestBase {
 
-   protected ClubDisplay buildClubDescription(String id, String title) {
+   protected ClubDisplay buildClubDisplay(String id, String title) {
       return new ClubDisplay(id, title, "This is a basic Description");
    }
 
@@ -35,6 +37,17 @@ public abstract class TestBaseController extends TestBase {
       }
 
       return so;
+   }
+
+   protected TopicDisplay buildTopicDisplay(String topicId) {
+      TopicDisplay td = new TopicDisplay();
+
+      td.setTopicId(topicId);
+      td.setMessage("Topic Message");
+      td.setPostDate("04/21/2025 19:15");
+      td.setPoster("Sam the Member");
+
+      return td;
    }
 
    protected void validateTitleView(String expectedTitle, String expectedView, ModelAndView actual) {

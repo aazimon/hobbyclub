@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import org.abberkeep.hobbyclub.TestBase;
 import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
+import org.abberkeep.hobbyclub.controller.dto.EventDisplay;
+import org.abberkeep.hobbyclub.controller.dto.SelectOption;
 import org.abberkeep.hobbyclub.controller.dto.TopicDisplay;
+import org.abberkeep.hobbyclub.services.domains.Club;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -27,6 +30,17 @@ public abstract class TestBaseController extends TestBase {
 
    protected ClubDisplay buildClubDisplay(String id, String title) {
       return new ClubDisplay(id, title, "This is a basic Description");
+   }
+
+   protected EventDisplay buildEventDisplay(int id, String title, Club club) {
+      EventDisplay ed = new EventDisplay();
+
+      ed.setId(Integer.toString(id));
+      ed.setTitle(title);
+      ed.setClubId(club.getClubId().toString());
+      ed.setClubTitle(club.getName());
+
+      return ed;
    }
 
    protected List<SelectOption> buildSelectOptions(int number) {

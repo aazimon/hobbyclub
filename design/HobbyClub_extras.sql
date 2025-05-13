@@ -1,0 +1,80 @@
+INSERT INTO city (name, state_id) SELECT 'Durham', s.state_id FROM state s WHERE s.name = 'North Carolina'; 
+INSERT INTO city (name, state_id) SELECT 'Winston-Salem', s.state_id FROM state s WHERE s.name = 'North Carolina'; 
+INSERT INTO city (name, state_id) SELECT 'Gresham', s.state_id FROM state s WHERE s.name = 'Oregon'; 
+INSERT INTO city (name, state_id) SELECT 'Hillsboro', s.state_id FROM state s WHERE s.name = 'Oregon'; 
+INSERT INTO city (name, state_id) SELECT 'South Bend', s.state_id FROM state s WHERE s.name = 'Indiana'; 
+INSERT INTO city (name, state_id) SELECT 'Carmel', s.state_id FROM state s WHERE s.name = 'Indiana'; 
+INSERT INTO city (name, state_id) SELECT 'Chattanooga', s.state_id FROM state s WHERE s.name = 'Tennessee'; 
+INSERT INTO city (name, state_id) SELECT 'Clarksville', s.state_id FROM state s WHERE s.name = 'Tennessee'; 
+INSERT INTO city (name, state_id) SELECT 'Broken Arrow', s.state_id FROM state s WHERE s.name = 'Oklahoma'; 
+INSERT INTO city (name, state_id) SELECT 'Edmond', s.state_id FROM state s WHERE s.name = 'Oklahoma'; 
+INSERT INTO city (name, state_id) SELECT 'Huntsville', s.state_id FROM state s WHERE s.name = 'Alabama'; 
+INSERT INTO city (name, state_id) SELECT 'Tuscaloosa', s.state_id FROM state s WHERE s.name = 'Alabama'; 
+INSERT INTO city (name, state_id) SELECT 'Vancouver', s.state_id FROM state s WHERE s.name = 'Washington'; 
+INSERT INTO city (name, state_id) SELECT 'Bellevue', s.state_id FROM state s WHERE s.name = 'Washington'; 
+INSERT INTO city (name, state_id) SELECT 'North Charleston', s.state_id FROM state s WHERE s.name = 'South Carolina'; 
+INSERT INTO city (name, state_id) SELECT 'Mount Pleasant', s.state_id FROM state s WHERE s.name = 'South Carolina'; 
+INSERT INTO city (name, state_id) SELECT 'Rock Hill', s.state_id FROM state s WHERE s.name = 'South Carolina'; 
+INSERT INTO city (name, state_id) SELECT 'West Valley City', s.state_id FROM state s WHERE s.name = 'Utah'; 
+INSERT INTO city (name, state_id) SELECT 'West Jordan', s.state_id FROM state s WHERE s.name = 'Utah'; 
+INSERT INTO city (name, state_id) SELECT 'Orem', s.state_id FROM state s WHERE s.name = 'Utah'; 
+INSERT INTO city (name, state_id) SELECT 'Lowell', s.state_id FROM state s WHERE s.name = 'Massachusetts'; 
+INSERT INTO city (name, state_id) SELECT 'Cambridge', s.state_id FROM state s WHERE s.name = 'Massachusetts'; 
+INSERT INTO city (name, state_id) SELECT 'Fort Collins', s.state_id FROM state s WHERE s.name = 'Colorado'; 
+INSERT INTO city (name, state_id) SELECT 'Lakewood', s.state_id FROM state s WHERE s.name = 'Colorado'; 
+INSERT INTO city (name, state_id) SELECT 'Columbia', s.state_id FROM state s WHERE s.name = 'Missouri'; 
+INSERT INTO city (name, state_id) SELECT 'Independence', s.state_id FROM state s WHERE s.name = 'Missouri'; 
+INSERT INTO city (name, state_id) SELECT 'Chandler', s.state_id FROM state s WHERE s.name = 'Arizona'; 
+INSERT INTO city (name, state_id) SELECT 'Glendale', s.state_id FROM state s WHERE s.name = 'Arizona'; 
+INSERT INTO city (name, state_id) SELECT 'Kenosha', s.state_id FROM state s WHERE s.name = 'Wisconsin'; 
+INSERT INTO city (name, state_id) SELECT 'Racine', s.state_id FROM state s WHERE s.name = 'Wisconsin'; 
+INSERT INTO city (name, state_id) SELECT 'Yonkers', s.state_id FROM state s WHERE s.name = 'New York'; 
+INSERT INTO city (name, state_id) SELECT 'Syracuse', s.state_id FROM state s WHERE s.name = 'New York'; 
+INSERT INTO city (name, state_id) SELECT 'Owensboro', s.state_id FROM state s WHERE s.name = 'Kentucky'; 
+INSERT INTO city (name, state_id) SELECT 'Covington', s.state_id FROM state s WHERE s.name = 'Kentucky'; 
+INSERT INTO city (name, state_id) SELECT 'Paduca', s.state_id FROM state s WHERE s.name = 'Kentucky'; 
+INSERT INTO city (name, state_id) SELECT 'Rochester', s.state_id FROM state s WHERE s.name = 'Minnesota'; 
+INSERT INTO city (name, state_id) SELECT 'Bloomington', s.state_id FROM state s WHERE s.name = 'Minnesota'; 
+INSERT INTO city (name, state_id) SELECT 'San Jose', s.state_id FROM state s WHERE s.name = 'California'; 
+INSERT INTO city (name, state_id) SELECT 'Fresno', s.state_id FROM state s WHERE s.name = 'California'; 
+INSERT INTO city (name, state_id) SELECT 'Jacksonville', s.state_id FROM state s WHERE s.name = 'Florida'; 
+INSERT INTO city (name, state_id) SELECT 'St. Petersburg', s.state_id FROM state s WHERE s.name = 'Florida'; 
+INSERT INTO city (name, state_id) SELECT 'Paterson', s.state_id FROM state s WHERE s.name = 'New Jersey'; 
+INSERT INTO city (name, state_id) SELECT 'Elizabeth', s.state_id FROM state s WHERE s.name = 'New Jersey'; 
+INSERT INTO city (name, state_id) SELECT 'Edison', s.state_id FROM state s WHERE s.name = 'New Jersey'; 
+INSERT INTO city (name, state_id) SELECT 'Allentown', s.state_id FROM state s WHERE s.name = 'Pennsylvania'; 
+INSERT INTO city (name, state_id) SELECT 'Erie', s.state_id FROM state s WHERE s.name = 'Pennsylvania'; 
+INSERT INTO city (name, state_id) SELECT 'Reading', s.state_id FROM state s WHERE s.name = 'Pennsylvania'; 
+INSERT INTO city (name, state_id) SELECT 'Warren', s.state_id FROM state s WHERE s.name = 'Michigan'; 
+INSERT INTO city (name, state_id) SELECT 'Sterling Heights', s.state_id FROM state s WHERE s.name = 'Michigan'; 
+INSERT INTO city (name, state_id) SELECT 'Ann Arbor', s.state_id FROM state s WHERE s.name = 'Michigan'; 
+INSERT INTO city (name, state_id) SELECT 'San Antonio', s.state_id FROM state s WHERE s.name = 'Texas'; 
+INSERT INTO city (name, state_id) SELECT 'Fort Worth', s.state_id FROM state s WHERE s.name = 'Texas'; 
+INSERT INTO city (name, state_id) SELECT 'Aurora', s.state_id FROM state s WHERE s.name = 'Illinois'; 
+INSERT INTO city (name, state_id) SELECT 'Naperville', s.state_id FROM state s WHERE s.name = 'Illinois'; 
+INSERT INTO city (name, state_id) SELECT 'Joliet', s.state_id FROM state s WHERE s.name = 'Illinois'; 
+INSERT INTO city (name, state_id) SELECT 'Rockford', s.state_id FROM state s WHERE s.name = 'Illinois'; 
+INSERT INTO city (name, state_id) SELECT 'Stamford', s.state_id FROM state s WHERE s.name = 'Connecticut'; 
+INSERT INTO city (name, state_id) SELECT 'Waterbury', s.state_id FROM state s WHERE s.name = 'Connecticut'; 
+INSERT INTO city (name, state_id) SELECT 'Lafayette', s.state_id FROM state s WHERE s.name = 'Louisiana'; 
+INSERT INTO city (name, state_id) SELECT 'Lake Charles', s.state_id FROM state s WHERE s.name = 'Louisiana'; 
+INSERT INTO city (name, state_id) SELECT 'Toledo', s.state_id FROM state s WHERE s.name = 'Ohio'; 
+INSERT INTO city (name, state_id) SELECT 'Akron', s.state_id FROM state s WHERE s.name = 'Ohio'; 
+INSERT INTO city (name, state_id) SELECT 'Columbus', s.state_id FROM state s WHERE s.name = 'Georgia'; 
+INSERT INTO city (name, state_id) SELECT 'Macon', s.state_id FROM state s WHERE s.name = 'Georgia'; 
+INSERT INTO city (name, state_id) SELECT 'Chesapeake', s.state_id FROM state s WHERE s.name = 'Virginia'; 
+INSERT INTO city (name, state_id) SELECT 'Newport News', s.state_id FROM state s WHERE s.name = 'Virginia'; 
+INSERT INTO city (name, state_id) SELECT 'Columbia', s.state_id FROM state s WHERE s.name = 'Maryland'; 
+INSERT INTO city (name, state_id) SELECT 'Germantown', s.state_id FROM state s WHERE s.name = 'Maryland'; 
+INSERT INTO city (name, state_id) SELECT 'Silver Spring', s.state_id FROM state s WHERE s.name = 'Maryland'; 
+INSERT INTO city (name, state_id) SELECT 'Waldorf', s.state_id FROM state s WHERE s.name = 'Maryland';
+Commit;
+
+# More Categories
+INSERT INTO categories (category_id, name) VALUES
+  (27, 'Foraging Club'), (28, 'LARP (Live Action Role Play) Club'),
+  (29, 'Puzzle & Riddle Club'), (30, 'Soap Making Club'),
+  (31, 'Urban Exploration Club'), (32, 'Origami & Paper Arts Club'),
+  (33, 'Astrobiology Club'), (34, 'Lockpicking & Security Club'),
+  (35, 'Birdwatching Club'), (36, 'Steampunk Makers Club');
+commit;

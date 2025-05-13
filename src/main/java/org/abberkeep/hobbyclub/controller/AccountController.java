@@ -5,9 +5,13 @@
 package org.abberkeep.hobbyclub.controller;
 
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
+import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
 import org.abberkeep.hobbyclub.controller.dto.LogInForm;
 import org.abberkeep.hobbyclub.controller.dto.RegistrationForm;
+import org.abberkeep.hobbyclub.controller.dto.SelectOption;
+import org.abberkeep.hobbyclub.controller.dto.UserFilterForm;
 import org.abberkeep.hobbyclub.services.AccountService;
 import org.abberkeep.hobbyclub.services.ClubService;
 import org.abberkeep.hobbyclub.services.EventService;
@@ -67,7 +71,7 @@ public class AccountController extends BaseController {
             mv.getModel().put("invalidLogin", "true");
          } else {
             session.setAttribute("userAccount", account);
-            setUpHomePage(mv, account);
+            setUpHomePage(mv, account, new UserFilterForm("", ""));
             return mv;
          }
       }
@@ -105,7 +109,7 @@ public class AccountController extends BaseController {
          Account account = accountService.createNewAccount(registrationForm);
          session.setAttribute("userAccount", account);
 
-         setUpHomePage(mv, account);
+         setUpHomePage(mv, account, new UserFilterForm("", ""));
       } else {
          // data missing.
          mv.getModel().put("firstName", registrationForm.getFirstName());
@@ -140,22 +144,59 @@ public class AccountController extends BaseController {
       Account account = (Account) session.getAttribute("userAccount");
       ModelAndView mv = new ModelAndView();
 
-      setUpHomePage(mv, account);
+      setUpHomePage(mv, account, new UserFilterForm("", ""));
 
       return mv;
    }
 
-   private void setUpHomePage(ModelAndView mv, Account account) {
+   @PostMapping("/userHomeFilter")
+   public ModelAndView userHomePageFiltering(@ModelAttribute UserFilterForm filterForm, HttpSession session) {
+      log.debug("User Home Page Filtering");
+      Account account = (Account) session.getAttribute("userAccount");
+      ModelAndView mv = new ModelAndView();
+
+      setUpHomePage(mv, account, filterForm);
+
+      return mv;
+   }
+
+   private int getInteger(String stringInt) {
+      if (stringInt == null || stringInt.isBlank()) {
+         return 0;
+      }
+      return Integer.valueOf(stringInt);
+   }
+
+   private void setUpHomePage(ModelAndView mv, Account account, UserFilterForm filterForm) {
       mv.setViewName("userhome");
       setUserLoggedIn(mv, account);
       mv.getModel().put("navTitle", account.getNickName() + " - Home Page");
       mv.getModel().put("title", "Hobby Club Home Page for " + account.getNickName());
       mv.getModel().put("categoryDropDown", clubService.getCategories("Choose"));
-      mv.getModel().put("yourClubEvents", eventService.getEventsForUserClubs(account));
-      mv.getModel().put("yourEvents", eventService.getEventsForUsers(account));
+
+      List<ClubDisplay> yourClubs = clubService.getYourJoinedClubs(account.getAccountId());
+      List<ClubDisplay> clubSelections = new ArrayList<>();
+
+      clubSelections.add(new ClubDisplay("0", "All", ""));
+      yourClubs.forEach(cd -> {
+         if (cd.getId().equals(filterForm.getFilterEvent())) {
+            cd.setEventSelected(true);
+         }
+         if (cd.getId().equals(filterForm.getFilterTopic())) {
+            cd.setTopicSelected(true);
+         }
+         clubSelections.add(cd);
+      });
+      mv.getModel().put("selectEventTopic", clubSelections);
+      mv.getModel().put("yourClubEvents", eventService.getEventsForUserClubs(account, getInteger(
+         filterForm.getFilterEvent())));
+      mv.getModel().put("yourEvents", eventService.getEventsForUsers(account, getInteger(filterForm.getFilterEvent())));
       mv.getModel().put("yourCreatedClubs", clubService.getYourCreatedClubs(account.getAccountId()));
-      mv.getModel().put("yourJoinedClubs", clubService.getYourJoinedClubs(account.getAccountId()));
-      mv.getModel().put("yourTopics", topicService.getTopicsForUser(account.getAccountId()));
+      mv.getModel().put("yourJoinedClubs", yourClubs);
+      mv.getModel().put("yourTopics", topicService.getTopicsForUser(account.getAccountId(), getInteger(
+         filterForm.getFilterTopic())));
+      mv.getModel().put("filterEvent", filterForm.getFilterEvent());
+      mv.getModel().put("filterTopic", filterForm.getFilterTopic());
    }
 
    private boolean validateLogInForm(LogInForm form, ModelAndView mv) {

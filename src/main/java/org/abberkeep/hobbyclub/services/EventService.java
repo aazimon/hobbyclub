@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.abberkeep.hobbyclub.controller.dto.EventDisplay;
 import org.abberkeep.hobbyclub.controller.dto.EventForm;
 import org.abberkeep.hobbyclub.services.domains.Account;
@@ -52,9 +53,15 @@ public class EventService {
          return "";
       }
       Event event = opt.get();
-      EventAttendance eventAttend = new EventAttendance(account, event, attendance);
+      // check if already attending.
+      EventAttendance aready = getAlreadyAttending(event.getEventAttendances(), account);
+      if (aready != null) {
+         aready.setAttending(attendance);
+      } else {
+         EventAttendance eventAttend = new EventAttendance(account, event, attendance);
 
-      event.addAttendance(eventAttend);
+         event.addAttendance(eventAttend);
+      }
       eventRepository.save(event);
 
       return event.getTitle();
@@ -66,7 +73,7 @@ public class EventService {
       List<EventDisplay> eds = new ArrayList<>();
 
       events.forEach(ev -> {
-         EventDisplay ed = mapEventDisplay(ev);
+         EventDisplay ed = mapEventDisplay(ev, loggedInUserId);
          if (ev.getAccount().getAccountId().equals(loggedInUserId)) {
             ed.setOwnEvent("true");
          }
@@ -86,12 +93,17 @@ public class EventService {
    }
 
    @Transactional
-   public List<EventDisplay> getEventsForUsers(Account account) {
-      List<Event> events = eventRepository.findByAccountAccountId(account.getAccountId());
+   public List<EventDisplay> getEventsForUsers(Account account, Integer clubId) {
+      List<Event> events;
+      if (clubId > 0) {
+         events = eventRepository.findByAccountAccountIdClubId(account.getAccountId(), clubId);
+      } else {
+         events = eventRepository.findByAccountAccountId(account.getAccountId());
+      }
       List<EventDisplay> eventDisplays = new ArrayList<>();
 
       events.forEach(ev -> {
-         EventDisplay ed = mapEventDisplay(ev);
+         EventDisplay ed = mapEventDisplay(ev, account.getAccountId());
 
          eventDisplays.add(ed);
       });
@@ -100,12 +112,17 @@ public class EventService {
    }
 
    @Transactional
-   public List<EventDisplay> getEventsForUserClubs(Account account) {
-      List<Event> events = eventRepository.findByClubAccountId(account.getAccountId());
+   public List<EventDisplay> getEventsForUserClubs(Account account, Integer clubId) {
+      List<Event> events;
+      if (clubId > 0) {
+         events = eventRepository.findByClubAccountIdClubId(account.getAccountId(), clubId);
+      } else {
+         events = eventRepository.findByClubAccountId(account.getAccountId());
+      }
       List<EventDisplay> eventDisplays = new ArrayList<>();
 
       events.forEach(ev -> {
-         EventDisplay ed = mapEventDisplay(ev);
+         EventDisplay ed = mapEventDisplay(ev, account.getAccountId());
 
          eventDisplays.add(ed);
       });
@@ -144,7 +161,16 @@ public class EventService {
       return eventRepository.save(event);
    }
 
-   private EventDisplay mapEventDisplay(Event ev) {
+   private EventAttendance getAlreadyAttending(Set<EventAttendance> eventAttendances, Account account) {
+      for (EventAttendance eventAttendance : eventAttendances) {
+         if (eventAttendance.getAccount().getAccountId().equals(account.getAccountId())) {
+            return eventAttendance;
+         }
+      }
+      return null;
+   }
+
+   private EventDisplay mapEventDisplay(Event ev, Integer loggedInUserId) {
       EventDisplay ed = new EventDisplay();
       ed.setId(ev.getEventId().toString());
       ed.setTitle(ev.getTitle());
@@ -158,19 +184,31 @@ public class EventService {
       int may = 0;
       int intrst = 0;
       int none = 0;
-      for (EventAttendance eventAttendance : ev.getEventAttendances()) {
-         switch (eventAttendance.getAttending()) {
+      for (EventAttendance evtAtt : ev.getEventAttendances()) {
+         switch (evtAtt.getAttending()) {
             case EventAttendance.WILL_ATTEND:
                will++;
+               if (evtAtt.getAccount().getAccountId().equals(loggedInUserId)) {
+                  ed.setUserAttend("true");
+               }
                break;
             case EventAttendance.MAY_ATTEND:
                may++;
+               if (evtAtt.getAccount().getAccountId().equals(loggedInUserId)) {
+                  ed.setUserMay("true");
+               }
                break;
             case EventAttendance.INTERESTED:
                intrst++;
+               if (evtAtt.getAccount().getAccountId().equals(loggedInUserId)) {
+                  ed.setUserInterest("true");
+               }
                break;
             default:
                none++;
+               if (evtAtt.getAccount().getAccountId().equals(loggedInUserId)) {
+                  ed.setUserNone("true");
+               }
          }
       }
       ed.setWillAttend(Integer.toString(will));

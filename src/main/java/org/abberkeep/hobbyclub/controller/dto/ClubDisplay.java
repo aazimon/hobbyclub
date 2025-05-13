@@ -18,6 +18,8 @@ public class ClubDisplay {
    private String id;
    private String title;
    private String description;
+   private boolean eventSelected = false;
+   private boolean topicSelected = false;
 
    public ClubDisplay() {
    }
@@ -40,6 +42,14 @@ public class ClubDisplay {
       return description;
    }
 
+   public boolean getEventSelected() {
+      return eventSelected;
+   }
+
+   public boolean getTopicSelected() {
+      return topicSelected;
+   }
+
    public void setId(String id) {
       this.id = id;
    }
@@ -50,6 +60,14 @@ public class ClubDisplay {
 
    public void setDescription(String description) {
       this.description = description;
+   }
+
+   public void setEventSelected(boolean eventSelected) {
+      this.eventSelected = eventSelected;
+   }
+
+   public void setTopicSelected(boolean topicSelected) {
+      this.topicSelected = topicSelected;
    }
 
 }

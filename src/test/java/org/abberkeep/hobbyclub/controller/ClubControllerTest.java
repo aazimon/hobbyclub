@@ -15,6 +15,7 @@ import org.abberkeep.hobbyclub.controller.dto.ClubDisplay;
 import org.abberkeep.hobbyclub.controller.dto.ClubForm;
 import org.abberkeep.hobbyclub.controller.dto.EventDisplay;
 import org.abberkeep.hobbyclub.controller.dto.EventForm;
+import org.abberkeep.hobbyclub.controller.dto.SelectOption;
 import org.abberkeep.hobbyclub.controller.dto.TopicForm;
 import org.abberkeep.hobbyclub.services.CategoryService;
 import org.abberkeep.hobbyclub.services.ClubService;
@@ -190,6 +191,38 @@ public class ClubControllerTest extends TestBaseController {
    }
 
    @Test
+   public void testAddEventTooLong() {
+      EventForm eventForm = new EventForm("Epic Anime Marathon: A 12-Hour Journey Through Iconic Series",
+         "Join us for an unforgettable 12-hour anime marathon celebrating some of the most iconic series in anime history! From action-packed classics to heartwarming slice-of-life favorites, we'll journey through beloved worlds that have shaped anime culture. Expect screenings, trivia games, cosplay showcases, and themed snacks. Bring your friends, dress up as your favorite characters, and get ready for a night filled with laughter, excitement, and pure anime magic! This is an event you don't want to miss.",
+         "2025/04/25 21:00", "3", "18");
+      Account account = buildAccount(10);
+
+      when(clubService.getClub(23)).thenReturn(club);
+      when(session.getAttribute("userAccount")).thenReturn(account);
+      when(clubService.isUserInClub(10, 23)).thenReturn(Boolean.TRUE);
+      when(locationService.getStatesSelected(13)).thenReturn(buildSelectOptions(20));
+      when(locationService.getCitiesSelected(13, 2)).thenReturn(buildSelectOptions(3));
+      when(eventService.getClubEvents(23, 10)).thenReturn(buildEventDisplays(4, club));
+      when(eventService.saveEvent(eventForm, account, club)).thenAnswer(invoc -> {
+         EventForm ef = invoc.getArgument(0);
+
+         assertEquals(50, ef.getNewEventTitle().length());
+         assertEquals(500, ef.getNewEventDetails().length());
+
+         return null;
+      });
+
+      ModelAndView actual = underTest.addEvent("23", eventForm, session);
+
+      validateTitleView("Title23", "club", actual);
+      assertEquals(PAGE_CLUB + 1, actual.getModel().size());
+      assertEquals("Title23", actual.getModel().get("navTitle"));
+      assertEquals("New Event Created", actual.getModel().get("clubMessage"));
+
+      verify(eventService).saveEvent(eventForm, account, club);
+   }
+
+   @Test
    public void testMarkAttendanceWillAttend() {
       Account account = buildAccount(10);
 
@@ -285,21 +318,81 @@ public class ClubControllerTest extends TestBaseController {
    }
 
    @Test
-   public void testPostTopic() {
+   public void testPostReply() {
+      Account account = buildAccount(10);
       TopicForm topicForm = new TopicForm("23", "Topic Text", null);
-      when(session.getAttribute("userAccount")).thenReturn(buildAccount(10));
+      when(session.getAttribute("userAccount")).thenReturn(account);
+      when(clubService.getClub(23)).thenReturn(club);
+
+      ModelAndView actual = underTest.postReply(topicForm, session);
+
+      validateTitleView("Title23", "club", actual);
+      verify(topicService).addReplyToTopic(topicForm, account);
+   }
+
+   @Test
+   public void testPostReplyTooLong() {
+      Account account = buildAccount(10);
+      TopicForm topicForm = new TopicForm("23",
+         "Anime is a vibrant and diverse art form that blends stunning visuals, deep storytelling, and unforgettable characters. From action-packed adventures like Naruto and Attack on Titan to heartwarming tales like Your Name, anime captivates audiences worldwide. It�s more than entertainment � it�s a window into culture, emotion, and imagination that brings fans together.",
+         null);
+      when(session.getAttribute("userAccount")).thenReturn(account);
+      when(clubService.getClub(23)).thenReturn(club);
+      when(topicService.addReplyToTopic(topicForm, account)).thenAnswer(invoc -> {
+         TopicForm tf = invoc.getArgument(0);
+
+         assertEquals(300, tf.getPost().length());
+
+         return null;
+      });
+
+      ModelAndView actual = underTest.postReply(topicForm, session);
+
+      validateTitleView("Title23", "club", actual);
+      verify(topicService).addReplyToTopic(topicForm, account);
+   }
+
+   @Test
+   public void testPostTopic() {
+      Account account = buildAccount(10);
+      TopicForm topicForm = new TopicForm("23", "Topic Text", null);
+      when(session.getAttribute("userAccount")).thenReturn(account);
       when(clubService.getClub(23)).thenReturn(club);
 
       ModelAndView actual = underTest.postTopic(topicForm, session);
 
       validateTitleView("Title23", "club", actual);
+      verify(topicService).saveTopic(topicForm, account);
+   }
+
+   @Test
+   public void testPostTopicTooLong() {
+      Account account = buildAccount(10);
+      TopicForm topicForm = new TopicForm("23",
+         "Anime is a vibrant and diverse art form that blends stunning visuals, deep storytelling, and unforgettable characters. From action-packed adventures like Naruto and Attack on Titan to heartwarming tales like Your Name, anime captivates audiences worldwide. It�s more than entertainment � it�s a window into culture, emotion, and imagination that brings fans together.",
+         null);
+      when(session.getAttribute("userAccount")).thenReturn(account);
+      when(clubService.getClub(23)).thenReturn(club);
+      when(topicService.saveTopic(topicForm, account)).thenAnswer(invoc -> {
+         TopicForm tf = invoc.getArgument(0);
+
+         assertEquals(300, tf.getPost().length());
+
+         return null;
+      });
+
+      ModelAndView actual = underTest.postTopic(topicForm, session);
+
+      validateTitleView("Title23", "club", actual);
+      verify(topicService).saveTopic(topicForm, account);
    }
 
    @Test
    public void testSaveClub() {
-      when(session.getAttribute("userAccount")).thenReturn(buildAccount(10));
+      Account account = buildAccount(10);
+      when(session.getAttribute("userAccount")).thenReturn(account);
       when(categoryService.getCategoryById(Integer.valueOf("3"))).thenReturn(buildCategory(3, "Category"));
-      when(clubService.saveClub(any())).thenAnswer(invocation -> {
+      when(clubService.saveClub(any(), eq(account))).thenAnswer(invocation -> {
          Club c = (Club) invocation.getArgument(0);
          c.setClubId(45);
          c.setCreateDatetime(LocalDateTime.now());
@@ -332,17 +425,6 @@ public class ClubControllerTest extends TestBaseController {
 
       assertTrue(actual.getStatusCode().is4xxClientError());
       assertEquals("invalid", actual.getBody());
-   }
-
-   private EventDisplay buildEventDisplay(int id, String title, Club club) {
-      EventDisplay ed = new EventDisplay();
-
-      ed.setId(Integer.toString(id));
-      ed.setTitle(title);
-      ed.setClubId(club.getClubId().toString());
-      ed.setClubTitle(club.getName());
-
-      return ed;
    }
 
    private List<EventDisplay> buildEventDisplays(int i, Club club) {

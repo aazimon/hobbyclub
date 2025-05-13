@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
-import org.abberkeep.hobbyclub.controller.SelectOption;
+import org.abberkeep.hobbyclub.controller.dto.SelectOption;
 import org.abberkeep.hobbyclub.services.domains.City;
 import org.abberkeep.hobbyclub.services.domains.State;
 import org.abberkeep.hobbyclub.services.repositories.CityRepository;
